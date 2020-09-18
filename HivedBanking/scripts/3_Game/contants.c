@@ -1,0 +1,1 @@
+static const int HIVEDBANKING_PANEL_MENU = 2159122303;

@@ -88,6 +88,7 @@ class HivedBankingWidget extends UIScriptedMenu
 
 	void BankingInit()	
 	{
+		HivedBankingLockControls();
 		Print("BankingWidget Init");
 		PlayerIdentity identity = PlayerIdentity.Cast(GetGame().GetPlayer().GetIdentity());
 		if (identity){
@@ -150,12 +151,12 @@ class HivedBankingWidget extends UIScriptedMenu
 		return NiceString;
 	}
 	
-	private void HivedBankingLockControls() {
+	void HivedBankingLockControls() {
         GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);
         GetGame().GetUIManager().ShowUICursor(true);
     }
 
-    private void HivedBankingUnLockControls() {
+    void HivedBankingUnLockControls() {
         GetGame().GetMission().PlayerControlEnable(false);
         GetGame().GetInput().ResetGameFocus();
         GetGame().GetUIManager().ShowUICursor(false);

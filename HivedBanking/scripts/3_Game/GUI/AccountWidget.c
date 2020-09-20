@@ -23,7 +23,7 @@ class HivedBankingWidget extends UIScriptedMenu
 		}
 		
 		layoutRoot 					= GetGame().GetWorkspace().CreateWidgets("HivedBanking/GUI/Layouts/Banking.layout");
-		m_BankingBoarder			= Widget.Cast( layoutRoot.FindAnyWidget( "Notification" ) );
+		m_BankingBoarder			= Widget.Cast( layoutRoot.FindAnyWidget( "BankingBoarder" ) );
 		m_BankingPanel	        	= Widget.Cast( layoutRoot.FindAnyWidget( "BankingPanel" ) );
 		m_Heading	    			= TextWidget.Cast( layoutRoot.FindAnyWidget( "Heading" ) );
 		m_BankBalance	   	 		= TextWidget.Cast( layoutRoot.FindAnyWidget( "BankBalance" ) );
@@ -53,6 +53,9 @@ class HivedBankingWidget extends UIScriptedMenu
 		} else {
 			ClearWarning();
 		}
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(g_BankAccount.LoadAccount, 200, false, sender);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 400, false);
+		GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(g_BankAccount.GUID) , true);
 	}
 	
 	void RPCReceivePlayerAmmount( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
@@ -61,9 +64,8 @@ class HivedBankingWidget extends UIScriptedMenu
 		if ( !ctx.Read( data ) ) return;
 		string GUID = data.param1;
 		float PlayerAmmount = data.param2;
-		if (GUID == g_BankAccount.GUID){
-			m_PlayerBalance.SetText("On You: $" + MakeNiceString(PlayerAmmount));
-		}
+		Print("[HivedBanking] ReceivePlayerAmmount " + PlayerAmmount);
+		m_PlayerBalance.SetText("On You: $" + MakeNiceString(PlayerAmmount));
 	}
 	
 	void DoWarning(string warningMessage){
@@ -88,6 +90,7 @@ class HivedBankingWidget extends UIScriptedMenu
 
 	void BankingInit()	
 	{
+		GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(g_BankAccount.GUID) , true);
 		HivedBankingLockControls();
 		Print("BankingWidget Init");
 		PlayerIdentity identity = PlayerIdentity.Cast(GetGame().GetPlayer().GetIdentity());
@@ -102,7 +105,7 @@ class HivedBankingWidget extends UIScriptedMenu
 	
 	void CheckForData(){
 		if (m_PanelIsOpen && g_BankAccount.DataReceived()){
-			m_BankBalance.SetText(MakeNiceString(g_BankAccount.Balance));
+			m_BankBalance.SetText("$" + MakeNiceString(g_BankAccount.Balance));
 			m_BankLimit.SetText("Limit: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit + g_BankAccount.LimitBonus));
 		} else if (m_PanelIsOpen){
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 200, false);
@@ -138,15 +141,17 @@ class HivedBankingWidget extends UIScriptedMenu
 		if (OrginalString.Length() <= 3){
 			return OrginalString;
 		} 
+		Print("MakeNiceString ORG: "  + DollarAmount);
 		int StrLen = OrginalString.Length() - 4;
 		NiceString = OrginalString.Substring(StrLen,3);
-		while (StrLen >= 3){
-			NiceString = OrginalString.Substring(StrLen,3) + "," + NiceString;
+		Print("MakeNiceString NiceString: "  + NiceString);
+		while (StrLen > 3){
 			StrLen = StrLen - 3;
+			NiceString = OrginalString.Substring(StrLen,3) + "," + NiceString;
+			Print("MakeNiceString NiceString: "  + NiceString);
 		}
-		if (StrLen > 0){
-			NiceString = OrginalString.Substring(0,StrLen) + "," + NiceString;
-		}
+		NiceString = OrginalString.Substring(0,StrLen) + "," + NiceString;
+		Print("MakeNiceString NiceString: "  + NiceString);
 		
 		return NiceString;
 	}

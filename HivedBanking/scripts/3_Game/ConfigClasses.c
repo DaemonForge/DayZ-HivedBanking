@@ -88,6 +88,23 @@ class HivedBankingModConfig extends UApiConfigBase
 		MoneyValues = SortedMoneyValues;
 	}
 	
+	HBMoneyValue GetHighestDenomination(float amount){
+		int LastIndex = MoneyValues.Count() - 1;
+		for (int i = 0; i < MoneyValues.Count(); i++){
+			if (GetAmount(MoneyValues.Get(i), amount) > 0){
+				return MoneyValues.Get(i);
+			}
+		}
+		return NULL;
+	}
+	
+	int GetAmount(HBMoneyValue MoneyObj, float amount){
+		if (MoneyObj){
+			return Math.Floor(amount / MoneyObj.Value);
+		} 
+		return 0;
+	}
+	
 };
 ref HivedBankingModConfig m_HivedBankingModConfig;
 ref HivedBankingModConfig GetHivedBankingModConfig(bool RdyToLoad = false){
@@ -144,7 +161,7 @@ class HivedBankAccount extends UApiConfigBase {
 	override string ToJson(){
 		string jsonString = JsonFileLoader<HivedBankAccount>.JsonMakeData(this);;
 		bool ok = false;
-		Print("[UAPI] Debug HivedBankAccount:" + jsonString);
+		//Print("[UAPI] Debug HivedBankAccount:" + jsonString);
 		return jsonString;
 	}
 	
@@ -164,61 +181,12 @@ class HivedBankAccount extends UApiConfigBase {
 	}
 	
 	override void OnSuccess(string data, int dataSize) {
+		Print("[UAPI] Debug HivedBankAccount OnSuccess:" + data);
 		JsonFileLoader<HivedBankAccount>.JsonLoadData(data, this);
-		if (this){
+		if (this.GUID != ""){
 			OnDataReceive();
 		} else {
 			Print("[BankingMod] HivedBankAccount Failed errorCode: Invalid Data");
 		}
 	}
 };
-
-
-ref HivedBankAccounts m_HivedBankAccounts;
-ref HivedBankAccounts BankAccounts(){
-	if (GetGame().IsServer() && !m_HivedBankAccounts){
-		 m_HivedBankAccounts = new HivedBankAccounts;
-	}
-	return m_HivedBankAccounts;
-}
-
-
-class HivedBankAccounts{
-	
-	ref map<string, ref HivedBankAccount> m_BankAccounts = new ref map<string, ref HivedBankAccount>;
-	
-	HivedBankAccount Get(string guid){
-		return m_BankAccounts.Get(guid);
-	}
-	
-	
-	void SaveAll(){
-		
-		
-	}
-	
-	void SaveNext(int i){
-		
-	}
-	
-	void OnConnect(PlayerIdentity identity){
-		if (PlayerIdentity.Cast(identity)){
-			ref HivedBankAccount tempAccount = new ref HivedBankAccount;
-			tempAccount.LoadAccount(identity);
-			Add(tempAccount);
-		}
-	}
-	
-	void Add(ref HivedBankAccount account_data){
-		if ( !m_BankAccounts.Get(account_data.GUID) ){
-			m_BankAccounts.Insert(account_data.GUID, account_data);
-		}
-	}
-	
-	void Save(string guid){
-		if ( !m_BankAccounts.Get(guid) ){
-		} else {
-			m_BankAccounts.Get(guid).Save();
-		}
-	}
-}

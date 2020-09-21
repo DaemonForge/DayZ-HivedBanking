@@ -27,7 +27,7 @@ modded class ItemBase
         if (!IsMagazine())
 		{
             int maxAmount = GetQuantityMax();			
-            if( amount >= maxAmount )
+            if ( amount >= maxAmount )
             {
                 SetQuantity(maxAmount);
                 return amount - maxAmount;

@@ -14,6 +14,10 @@ class HivedBankingWidget extends UIScriptedMenu
 	protected ref TextWidget			m_BankLimit;
 	protected ref TextWidget			m_PlayerBalance;
 	protected ref TextWidget			m_WarningMessage;
+	protected ref EditBoxWidget			m_Amount;
+	
+	protected ref ButtonWidget			m_DepositButton;
+	protected ref ButtonWidget			m_WithdrawButton;
 	
 	
 	override Widget Init()
@@ -30,6 +34,11 @@ class HivedBankingWidget extends UIScriptedMenu
 		m_BankLimit	   	 			= TextWidget.Cast( layoutRoot.FindAnyWidget( "Limit" ) );
 		m_PlayerBalance	   	 		= TextWidget.Cast( layoutRoot.FindAnyWidget( "PlayerBalance" ) );
 		m_WarningMessage	   	 	= TextWidget.Cast( layoutRoot.FindAnyWidget( "Warning_Message" ) );
+		m_Amount	   	 			= EditBoxWidget.Cast( layoutRoot.FindAnyWidget( "Amount" ) );
+		
+		m_DepositButton	   	 		= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "Deposit_Button" ) );
+		m_WithdrawButton	   	 	= ButtonWidget.Cast( layoutRoot.FindAnyWidget( "Withdraw_Button" ) );
+		
 		ClearWarning();
 		m_BankingBoarder.Show(false);
 		m_BankingPanel.Show(false);
@@ -56,6 +65,8 @@ class HivedBankingWidget extends UIScriptedMenu
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(g_BankAccount.LoadAccount, 200, false, sender);
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 400, false);
 		GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(g_BankAccount.GUID) , true);
+		
+		GetGame().GetPlayer().UpdateInventoryMenu();
 	}
 	
 	void RPCReceivePlayerAmmount( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
@@ -66,6 +77,8 @@ class HivedBankingWidget extends UIScriptedMenu
 		float PlayerAmmount = data.param2;
 		Print("[HivedBanking] ReceivePlayerAmmount " + PlayerAmmount);
 		m_PlayerBalance.SetText("On You: $" + MakeNiceString(PlayerAmmount));
+		
+		GetGame().GetPlayer().UpdateInventoryMenu();
 	}
 	
 	void DoWarning(string warningMessage){
@@ -90,11 +103,11 @@ class HivedBankingWidget extends UIScriptedMenu
 
 	void BankingInit()	
 	{
-		GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(g_BankAccount.GUID) , true);
 		HivedBankingLockControls();
 		Print("BankingWidget Init");
 		PlayerIdentity identity = PlayerIdentity.Cast(GetGame().GetPlayer().GetIdentity());
 		if (identity){
+			GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(identity.GetId()) , true);
 			m_BankLimit.SetText("Limit: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit));
 			m_Heading.SetText(GetHivedBankingModConfig().BankName);
 			g_BankAccount = new ref HivedBankAccount;
@@ -110,6 +123,14 @@ class HivedBankingWidget extends UIScriptedMenu
 		} else if (m_PanelIsOpen){
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 200, false);
 		}
+	}
+	
+	float SnapValue( float value){
+		int LastIndex = GetHivedBankingModConfig().MoneyValues.Count() - 1;
+		float min = GetHivedBankingModConfig().MoneyValues.Get(LastIndex).Value;
+		float MinValue = value / min;
+		float Value = Math.Round(MinValue);
+		return Value * min;
 	}
 	
 	bool IsOpen() {
@@ -143,18 +164,72 @@ class HivedBankingWidget extends UIScriptedMenu
 		} 
 		Print("MakeNiceString ORG: "  + DollarAmount);
 		int StrLen = OrginalString.Length() - 4;
-		NiceString = OrginalString.Substring(StrLen,3);
-		Print("MakeNiceString NiceString: "  + NiceString);
+		string StrSelection = OrginalString.Substring(StrLen,3);
+		NiceString = StrSelection;
 		while (StrLen > 3){
 			StrLen = StrLen - 3;
-			NiceString = OrginalString.Substring(StrLen,3) + "," + NiceString;
-			Print("MakeNiceString NiceString: "  + NiceString);
+			StrSelection = OrginalString.Substring(StrLen,3);
+			NiceString = StrSelection + "," + NiceString;
 		}
-		NiceString = OrginalString.Substring(0,StrLen) + "," + NiceString;
-		Print("MakeNiceString NiceString: "  + NiceString);
+		StrSelection = OrginalString.Substring(StrLen,3);
+		NiceString = StrSelection + "," + NiceString;
 		
-		return NiceString;
+		return DollarAmount.ToString();
 	}
+	
+	override bool OnClick( Widget w, int x, int y, int button )
+	{
+		if (w == m_DepositButton){
+			float DepositAmount = 0;
+			DepositAmount = m_Amount.GetText().ToFloat();
+			if (DepositAmount > 0){
+				GetRPCManager().SendRPC("HBANK", "RPCBankingtransaction", new Param3<string, string, float>(g_BankAccount.GUID,"DEPOSIT", SnapValue(m_Amount.GetText().ToFloat())) , true);
+			} else {
+				DoWarning("Invalid Amount");
+			}
+			return true;
+		}
+		if (w == m_WithdrawButton){
+			float WithdrawAmount = 0;
+			WithdrawAmount = m_Amount.GetText().ToFloat();
+			if (WithdrawAmount > 0){
+				GetRPCManager().SendRPC("HBANK", "RPCBankingtransaction", new Param3<string, string, float>(g_BankAccount.GUID,"WITHDRAW", SnapValue(m_Amount.GetText().ToFloat())) , true);
+			}else {
+				DoWarning("Invalid Amount");
+			}
+			return true;
+		}
+		return super.OnClick(w, x, y, button);
+	}
+	
+	override bool OnChange(Widget w, int x, int y, bool finished)
+	{
+		if (w == m_Amount){
+			string amount = CheckInput(m_Amount.GetText());
+        	m_Amount.SetText(amount);
+			return true;
+        }
+        return super.OnChange(w,x,y,finished);
+	}
+	
+	string CheckInput(string input)
+    {
+		string amount = "";
+		for (int i = 0; i<input.Length(); i++){
+			if (ValidInput(input.Get(i))){
+				amount = amount + input.Get(i);
+			}
+		}
+		return amount;
+    }
+	
+	bool ValidInput(string input)
+    {
+		if (input.Contains("0") || input.Contains("1") || input.Contains("2") || input.Contains("3") || input.Contains("4") || input.Contains("5") || input.Contains("6") || input.Contains("7") || input.Contains("8") || input.Contains("9") || input.Contains(".")){
+			return true;
+		}
+		return false;
+    }
 	
 	void HivedBankingLockControls() {
         GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);

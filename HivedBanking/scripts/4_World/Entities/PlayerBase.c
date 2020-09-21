@@ -1,7 +1,7 @@
 modded class PlayerBase extends ManBase
 {
 	bool HBCanAccept(ItemBase item){
-		return !item.IsRuined();
+		return !item.IsRuined() || GetHivedBankingModConfig().CanDepositRuinedBills;
 	}
 	
 	
@@ -23,8 +23,6 @@ modded class PlayerBase extends ManBase
 		}
 		return PlayerBalance;
 	}
-	
-	
 	
 	
 	int HBAddMoney(float Amount){
@@ -81,12 +79,11 @@ modded class PlayerBase extends ManBase
 		for (int i = 0; i < GetHivedBankingModConfig().MoneyValues.Count(); i++){
 			AmountToRemove =  HBRemoveMoneyInventory(GetHivedBankingModConfig().MoneyValues.Get(i), AmountToRemove);
 		}
-		if (AmountToRemove > 0){ // Now to delete a larger bill and make change
-			int MaxIndex = GetHivedBankingModConfig().MoneyValues.Count() - 1;
-			for (int j = MaxIndex; j > 0; j--){
-				int NewAmountToRemove =  HBRemoveMoneyInventory(GetHivedBankingModConfig().MoneyValues.Get(j), GetHivedBankingModConfig().MoneyValues.Get(j).Value);
+		if (AmountToRemove >= SmallestCurrency){ // Now to delete a larger bill and make change
+			for (int j = LastIndex; j >= 0; j--){
+				float NewAmountToRemove =  HBRemoveMoneyInventory(GetHivedBankingModConfig().MoneyValues.Get(j), GetHivedBankingModConfig().MoneyValues.Get(j).Value);
 				if (NewAmountToRemove == 0){
-					int AmountToAddBack = GetHivedBankingModConfig().MoneyValues.Get(j).Value - AmountToRemove;
+					float AmountToAddBack = GetHivedBankingModConfig().MoneyValues.Get(j).Value - AmountToRemove;
 					HBAddMoney(AmountToAddBack);
 				}
 			}
@@ -96,12 +93,14 @@ modded class PlayerBase extends ManBase
 	//Return how much left still to remove
 	float HBRemoveMoneyInventory(HBMoneyValue MoneyValue, float Amount ){
 		int AmountToRemove = GetHivedBankingModConfig().GetAmount(MoneyValue, Amount);
+		int LastIndex = GetHivedBankingModConfig().MoneyValues.Count() - 1;
+		float SmallestCurrency = GetHivedBankingModConfig().MoneyValues.Get(LastIndex).Value;
 		if (AmountToRemove > 0){
 			array<EntityAI> itemsArray = new array<EntityAI>;
 			this.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
 			for (int i = 0; i < itemsArray.Count(); i++){
 				ItemBase item = ItemBase.Cast(itemsArray.Get(i));
-				if (item){
+				if (item && HBCanAccept(item)){
 					string ItemType = item.GetType();
 					ItemType.ToLower();
 					string MoneyType = MoneyValue.Item;
@@ -194,7 +193,7 @@ modded class PlayerBase extends ManBase
 		//any leftover or new stacks
 		while (currentAmount > 0)
 		{
-			EntityAI newItem = EntityAI.Cast(this.GetInventory().CreateInInventory(itemType));
+			ItemBase newItem = ItemBase.Cast(this.GetInventory().CreateInInventory(itemType));
 			if (!newItem)
 			{
 				for (int j = 0; j < itemsArray.Count(); j++)
@@ -203,7 +202,7 @@ modded class PlayerBase extends ManBase
 					if (!item){
 						continue;
 					}
-					newItem = EntityAI.Cast(item.GetInventory().CreateInInventory(itemType)); //CreateEntityInCargo	
+					newItem = ItemBase.Cast(item.GetInventory().CreateInInventory(itemType)); //CreateEntityInCargo	
 					if (newItem){
 						break;
 					}
@@ -217,6 +216,7 @@ modded class PlayerBase extends ManBase
 				int SetAmount = currentAmount;
 				if (newMagItem.GetQuantityMax() <= currentAmount){
 					SetAmount = currentAmount;
+					currentAmount = 0;
 				} else {
 					SetAmount = newMagItem.GetQuantityMax();
 					currentAmount = currentAmount - SetAmount;
@@ -239,9 +239,22 @@ modded class PlayerBase extends ManBase
 	}
 	
 	//Return How many Items it faild to create in on the ground
-	int HBCreateMoneyGround(string Type, int Amount){
-		
-		return 0;
+	void HBCreateMoneyGround(string Type, int Amount){
+		int AmountToSpawn = Amount;
+		bool hasSomeQuant = ((HBMaxQuantity(Type) > 0) || HBHasQuantity(Type));
+		int MaxQuanity = HBMaxQuantity(Type);
+		int StacksRequired = AmountToSpawn;
+		if (MaxQuanity != 0){
+			StacksRequired = Math.Ceil( AmountToSpawn /  MaxQuanity);
+		}
+		for (int i = 0; i <= StacksRequired; i++){
+			if (AmountToSpawn > 0){
+				ItemBase newItem = ItemBase.Cast(GetGame().CreateObjectEx(Type, GetPosition(), ECE_PLACE_ON_SURFACE));
+				if (newItem && hasSomeQuant){
+					AmountToSpawn = newItem.HBSetQuantity(AmountToSpawn);
+				}
+			}
+		}
 	}
 	
 	int HBCurrentQuantity(ItemBase money){
@@ -308,4 +321,6 @@ modded class PlayerBase extends ManBase
 	
 	    return false;
 	}
+	
+	
 }

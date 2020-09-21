@@ -6,6 +6,7 @@ class HivedBankingModConfig extends UApiConfigBase
 	
 	float StartingBalance = 0;
 	float StartingLimit = 1000000;
+	bool CanDepositRuinedBills = false;
 	
 	ref array<ref HBMoneyValue> MoneyValues = new ref array<ref HBMoneyValue>;
 	

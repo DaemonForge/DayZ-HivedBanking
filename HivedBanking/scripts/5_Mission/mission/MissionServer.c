@@ -3,8 +3,6 @@ modded class MissionServer extends MissionBase
 	void MissionServer(){	
 		GetRPCManager().AddRPC( "HBANK", "RPCBankingtransaction", this, SingeplayerExecutionType.Both );
 		GetRPCManager().AddRPC( "HBANK", "RPCReqPlayerBalance", this, SingeplayerExecutionType.Both );
-		GetRPCManager().AddRPC( "HBANK", "RPCRequestWithdraw", this, SingeplayerExecutionType.Both );
-		GetRPCManager().AddRPC( "HBANK", "RPCRequestDeposit", this, SingeplayerExecutionType.Both );	
 	}
 	
 	override void OnInit(){
@@ -31,9 +29,9 @@ modded class MissionServer extends MissionBase
 	
 	void RPCBankingtransaction( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
 	{
-		PlayerIdentity identity;
+		PlayerIdentity identity = PlayerIdentity.Cast(sender);
 		Param3<string, string, float> data;  //Player ID, Icon
-		if ( !ctx.Read( data ) && !Class.CastTo(identity, sender) ) return;
+		if ( !ctx.Read( data ) && !identity ) return;
 		string GUID = data.param1;
 		string TransactionType = data.param2;
 		float TransactionValue = data.param3;
@@ -67,7 +65,7 @@ modded class MissionServer extends MissionBase
 			ref HivedBankAccount Account = BankAccounts().Get(identity.GetId());
 			if (Account){
 				string WarningMessage ="";
-				if (Account.Balance > amount){
+				if (Account.Balance < amount){
 					WarningMessage = "Insufficient Funds";
 					amount = Account.Balance;
 				}

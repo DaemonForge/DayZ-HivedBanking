@@ -20,6 +20,7 @@ FrameWidgetClass rootFrame {
    vexactpos 0
    hexactsize 0
    vexactsize 0
+   draggable 1
    style Outline
    {
     PanelWidgetClass BankingPanel {
@@ -33,7 +34,7 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     draggable 1
+     draggable 0
      style rover_sim_colorable
      {
       PanelWidgetClass BankBalBorder {
@@ -135,7 +136,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         style Default
+         style ServerBrowser
          text "0"
          "limit visible" 0
          "Use default text" 1

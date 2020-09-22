@@ -144,12 +144,12 @@ class HivedBankAccount extends UApiConfigBase {
 		Name = identity.GetName();
 		SteamID = identity.GetPlainId();
 		
+		SetDefaults();
 		Load(GUID);
 	}
 	
 	override void Load(string ID){
 		SetDataReceived(false);
-		SetDefaults();
 		UApi().Rest().PlayerLoad("Banking", ID, this, this.ToJson());
 	}
 	

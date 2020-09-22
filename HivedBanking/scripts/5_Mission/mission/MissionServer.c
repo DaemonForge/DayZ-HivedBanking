@@ -48,14 +48,16 @@ modded class MissionServer extends MissionBase
 	
 	
 	void RPCReqPlayerBalance( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target ){
-		PlayerIdentity identity;
+		PlayerIdentity identity = PlayerIdentity.Cast(sender);
 		Param1<string> data;  //Player ID, Icon
-		if ( !ctx.Read( data ) && !Class.CastTo(identity, sender) ) return;
+		if ( !ctx.Read( data ) && sender ) return;
 		string PlayerGUID = data.param1;
 		PlayerBase player = PlayerBase.Cast(UApi().FindPlayer(PlayerGUID));
-		if (player && identity.GetId() == PlayerGUID){
-			float PlayerBalance = player.HBGetPlayerBalance();
-			GetRPCManager().SendRPC("HBANK", "RPCReceivePlayerAmmount", new Param2<string, float>(identity.GetId(), PlayerBalance) , true, identity);
+		if (player && identity){
+			if (identity.GetId() == PlayerGUID){
+				float PlayerBalance = player.HBGetPlayerBalance();
+				GetRPCManager().SendRPC("HBANK", "RPCReceivePlayerAmmount", new Param2<string, float>(PlayerGUID, PlayerBalance) , true, identity);
+			}
 		}
 	}
 

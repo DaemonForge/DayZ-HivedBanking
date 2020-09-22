@@ -57,7 +57,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "$10,000"
+         text "$00000"
          "text halign" center
          "text valign" center
         }
@@ -83,7 +83,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "On You: 10000"
+         text "On You: 00000"
          font "gui/fonts/etelkatextpro14"
          "text valign" center
         }
@@ -263,7 +263,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "Limit: $1,000,000"
+         text "Limit: $00000000"
          font "gui/fonts/etelkatextpro14"
          "text halign" right
          "text valign" center

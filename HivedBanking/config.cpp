@@ -71,5 +71,20 @@ class CfgVehicles
 		};  
 		
 	};
+	class HivedAtmSmall : HivedAtm
+	{
+		scope = 1;
+		displayName  = "Hived Atm Small";
+		model = "HivedBanking\Data\HivedAtm_Small.p3d";
+		hiddenSelections[] = 
+		{        
+			"zbytek"
+		};
+		hiddenSelectionsTextures[] = 
+		{
+			"HivedBanking\Data\textures\HivedAtm_Small_co.paa" 
+		};  
+		
+	};
 };
 

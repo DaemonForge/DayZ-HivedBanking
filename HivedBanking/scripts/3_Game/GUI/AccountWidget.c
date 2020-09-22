@@ -103,16 +103,20 @@ class HivedBankingWidget extends UIScriptedMenu
 
 	void BankingInit()	
 	{
-		HivedBankingLockControls();
-		Print("BankingWidget Init");
-		PlayerIdentity identity = PlayerIdentity.Cast(GetGame().GetPlayer().GetIdentity());
-		if (identity){
-			GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(identity.GetId()) , true);
-			m_BankLimit.SetText("Limit: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit));
-			m_Heading.SetText(GetHivedBankingModConfig().BankName);
-			g_BankAccount = new ref HivedBankAccount;
-			g_BankAccount.LoadAccount(identity);
-			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 200, false);
+		if (UApi().HasValidAuth()){
+			HivedBankingLockControls();
+			Print("BankingWidget Init");
+			PlayerIdentity identity = PlayerIdentity.Cast(GetGame().GetPlayer().GetIdentity());
+			if (identity){
+				GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(identity.GetId()) , true);
+				m_BankLimit.SetText("Limit: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit));
+				m_Heading.SetText(GetHivedBankingModConfig().BankName);
+				g_BankAccount = new ref HivedBankAccount;
+				g_BankAccount.LoadAccount(identity);
+				GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 200, false);
+			}
+		} else {
+			m_Heading.SetText("BANK IS CURRENTLY OFFLINE");
 		}
 	}
 	
@@ -179,6 +183,10 @@ class HivedBankingWidget extends UIScriptedMenu
 	
 	override bool OnClick( Widget w, int x, int y, int button )
 	{
+		if (!UApi().HasValidAuth()){
+			DoWarning("Sorry Bank is currently Offline");
+			return super.OnClick(w, x, y, button);
+		}
 		if (w == m_DepositButton){
 			float DepositAmount = 0;
 			DepositAmount = m_Amount.GetText().ToFloat();

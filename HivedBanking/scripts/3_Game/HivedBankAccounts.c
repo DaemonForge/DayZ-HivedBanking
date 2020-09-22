@@ -51,13 +51,15 @@ class HivedBankAccounts{
 	void Add(ref HivedBankAccount account_data){
 		if ( !Get(account_data.GUID) ){
 			m_BankAccounts.Insert(account_data.GUID, account_data);
+		} else { //Just make sure the data is reloaded from the server if trying to readd someone
+			Get(account_data.GUID).Load(account_data.GUID);
 		}
 	}
 	
 	void Remove(string guid){
 		if ( Get(guid) ){
 			Get(guid).Save();
-			m_BankAccounts.Remove(guid);
+			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(m_BankAccounts.Remove, 10, false, guid);
 		}
 	}
 	

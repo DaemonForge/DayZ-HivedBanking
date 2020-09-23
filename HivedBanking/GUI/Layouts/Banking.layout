@@ -25,7 +25,7 @@ FrameWidgetClass rootFrame {
    {
     PanelWidgetClass BankingPanel {
      ignorepointer 0
-     color 0.2157 0.2157 0.2157 0.651
+     color 0.2784 0.2784 0.2784 0.8863
      position 0 0
      size 0.99 0.98
      halign center_ref
@@ -67,7 +67,7 @@ FrameWidgetClass rootFrame {
        ignorepointer 1
        color 0 0 0 1
        position 0.015 0.03
-       size 0.4 0.1
+       size 0.4 0.12
        valign bottom_ref
        hexactpos 0
        vexactpos 0
@@ -83,8 +83,9 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "On You: 00000"
+         text "On You: 10000"
          font "gui/fonts/etelkatextpro14"
+         "exact text" 1
          "text valign" center
         }
        }
@@ -92,7 +93,7 @@ FrameWidgetClass rootFrame {
       PanelWidgetClass HeadingBorder {
        ignorepointer 1
        position 0 0.03
-       size 0.8 0.18
+       size 0.9 0.18
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -110,7 +111,10 @@ FrameWidgetClass rootFrame {
          vexactsize 0
          style Normal
          text "Multi World Bank"
-         font "gui/fonts/metron-bold28"
+         font "gui/fonts/metron-bold48"
+         "exact text" 1
+         "size to text h" 0
+         "size to text v" 0
          "text halign" center
          "text valign" center
         }
@@ -158,7 +162,7 @@ FrameWidgetClass rootFrame {
       FrameWidgetClass ButtonsFrame {
        ignorepointer 1
        position 0.02 0.28
-       size 0.42 0.18
+       size 0.42 0.22
        halign right_ref
        valign bottom_ref
        hexactpos 0
@@ -167,9 +171,9 @@ FrameWidgetClass rootFrame {
        vexactsize 0
        {
         ButtonWidgetClass Deposit_Button {
-         color 0 0.0667 0.2706 0.3608
+         color 0 0.0667 0.2706 0.7804
          position 0.12 0
-         size 0.35 0.7
+         size 0.35 0.53
          valign bottom_ref
          hexactpos 0
          vexactpos 0
@@ -195,9 +199,9 @@ FrameWidgetClass rootFrame {
          }
         }
         ButtonWidgetClass Withdraw_Button {
-         color 0 0.0667 0.2706 0.3608
+         color 0 0.0667 0.2706 0.7804
          position 0 0
-         size 0.48 0.7
+         size 0.48 0.53
          halign right_ref
          valign bottom_ref
          hexactpos 0
@@ -227,15 +231,16 @@ FrameWidgetClass rootFrame {
          ignorepointer 1
          color 0.6235 0.1569 0.1569 1
          position 0 0
-         size 1 0.3
+         size 1 0.43
          halign right_ref
          hexactpos 0
          vexactpos 0
          hexactsize 0
          vexactsize 0
          text "Insuficent Funds"
-         font "gui/fonts/metron-italic12"
-         "text color" 0.6235 0.1569 0.1569 1
+         font "gui/fonts/metron-italic14"
+         "text color" 0.8431 0.1137 0.0235 1
+         "exact text" 0
          "text halign" right
          "text valign" center
         }
@@ -245,7 +250,7 @@ FrameWidgetClass rootFrame {
        ignorepointer 1
        color 0 0 0 1
        position 0.015 0.03
-       size 0.33 0.1
+       size 0.36 0.12
        halign right_ref
        valign bottom_ref
        hexactpos 0
@@ -263,8 +268,9 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "Limit: $00000000"
+         text "Limit: $1000000"
          font "gui/fonts/etelkatextpro14"
+         "exact text" 1
          "text halign" right
          "text valign" center
         }

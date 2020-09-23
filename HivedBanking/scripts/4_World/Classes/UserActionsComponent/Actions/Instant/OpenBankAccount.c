@@ -1,41 +1,31 @@
 class ActionAccessHivedAccount extends ActionInteractBase
 {
 
-	void ExpansionActionOpenTraderMenu()
-	{
+	void ExpansionActionOpenTraderMenu(){
 		m_CommandUID = DayZPlayerConstants.CMD_ACTIONMOD_ATTACHITEM;
 	}
 	
-	override string GetText()
-	{
+	override string GetText(){
 		return "Access Account";
 	}
 
-	override typename GetInputType()
-	{
-		return InteractActionInput;
-	}
 	
-	override bool ActionCondition( PlayerBase player, ActionTarget target, ItemBase item )
-	{	
+	override bool ActionCondition( PlayerBase player, ActionTarget target, ItemBase item ){	
 		return true;
 	}
 	
-	
-	override void OnStartClient( ActionData action_data )
-	{
-		super.OnStartClient( action_data );
+
+	override void OnExecuteClient( ActionData action_data ){
+		super.OnExecuteClient( action_data );
 		if (m_HivedBankingPanel) {
             if (m_HivedBankingPanel.IsOpen()){
             } else if (GetGame().GetUIManager().GetMenu() == NULL) {
-				
-				//Wait a bit before opening so that way player data is received
 				if (!m_HivedBankingPanel_Opening){
 					GetGame().GetCallQueue(CALL_CATEGORY_GUI).Call(this.OpenPanel);
 				}
 				m_HivedBankingPanel_Opening = true;
             }
-        } else if (GetGame().GetUIManager().GetMenu() == NULL && m_HivedBankingPanel == null) {
+        } else if (GetGame().GetUIManager().GetMenu() == NULL && m_HivedBankingPanel == NULL) {
 			//Wait a bit before opening so that way player data is received
 			if (!m_HivedBankingPanel_Opening){
 				GetGame().GetCallQueue(CALL_CATEGORY_GUI).Call(this.CreatePanel);
@@ -51,8 +41,7 @@ class ActionAccessHivedAccount extends ActionInteractBase
 		m_HivedBankingPanel_Opening = false;
 	}
 	
-	void CreatePanel()
-	{
+	void CreatePanel(){
 	    m_HivedBankingPanel = HivedBankingWidget.Cast(GetGame().GetUIManager().EnterScriptedMenu(HIVEDBANKING_PANEL_MENU, null));
 	    m_HivedBankingPanel.SetOpen(true);
 	    m_HivedBankingPanel.HivedBankingLockControls();

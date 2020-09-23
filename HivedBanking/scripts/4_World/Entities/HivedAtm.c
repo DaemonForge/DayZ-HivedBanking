@@ -1,13 +1,15 @@
-class HivedAtm extends BuildingSuper
-{
-	override void SetActions()
-	{
+class HivedAtm extends BuildingSuper {
+	
+	override void SetActions(){
 		super.SetActions();
 		AddAction(ActionAccessHivedAccount);
 	}
-	
 }
 
-class HivedAtmSmall extends HivedAtm {
+class HivedAtmSmall extends BuildingSuper {
 	
+	override void SetActions(){
+		super.SetActions();
+		AddAction(ActionAccessHivedAccount);
+	}
 }

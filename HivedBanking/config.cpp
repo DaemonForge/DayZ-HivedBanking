@@ -56,32 +56,26 @@ class CfgMods
 class CfgVehicles
 {
 	class HouseNoDestruct;
-	class HivedAtm : HouseNoDestruct
-	{
+	class HivedAtm : HouseNoDestruct{
 		scope = 1;
 		displayName  = "Hived Atm";
 		model = "HivedBanking\Data\HivedAtm.p3d";
-		hiddenSelections[] = 
-		{        
+		hiddenSelections[] = {        
 			"zbytek"
 		};
-		hiddenSelectionsTextures[] = 
-		{
+		hiddenSelectionsTextures[] = {
 			"HivedBanking\Data\textures\HivedAtm_co.paa" 
 		};  
 		
 	};
-	class HivedAtmSmall : HivedAtm
-	{
+	class HivedAtmSmall : HouseNoDestruct{
 		scope = 1;
 		displayName  = "Hived Atm Small";
 		model = "HivedBanking\Data\HivedAtm_Small.p3d";
-		hiddenSelections[] = 
-		{        
+		hiddenSelections[] = {        
 			"zbytek"
 		};
-		hiddenSelectionsTextures[] = 
-		{
+		hiddenSelectionsTextures[] = {
 			"HivedBanking\Data\textures\HivedAtm_Small_co.paa" 
 		};  
 		

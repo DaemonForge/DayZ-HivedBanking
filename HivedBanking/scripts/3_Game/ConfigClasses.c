@@ -47,13 +47,14 @@ class HivedBankingModConfig extends UApiConfigBase
 		Print("[BankingMod] CallBack Failed errorCode: " + errorCode);		
 		SetDataReceived(true);
 		BankName = "Bank Offline - " + errorCode;
+		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load,300 * 1000, false);
 	};
 	
 	override void OnTimeout() {
 		Print("[BankingMod] CallBack Failed errorCode: Timeout");
 		SetDataReceived(true);
 		BankName = "Bank Offline - T";
-		
+		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load,300 * 1000, false);
 	};
 	
 	override void OnSuccess(string data, int dataSize) {
@@ -63,6 +64,7 @@ class HivedBankingModConfig extends UApiConfigBase
 		} else {
 			Print("[BankingMod] HivedBankingModConfig Failed errorCode: Invalid Data");
 			BankName = "Bank Offline";
+			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load, 300 * 1000, false);
 		}
 		
 	};

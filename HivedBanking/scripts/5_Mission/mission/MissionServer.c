@@ -13,7 +13,7 @@ modded class MissionServer extends MissionBase
 	{
 		super.InvokeOnConnect(player, identity);
 		if ( identity ){ //Make sure the server creates the default Config for the player
-			BankAccounts().OnConnect(identity);
+			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(BankAccounts().OnConnect, 7 * 1000, false, identity);
 		}
 	}
 	

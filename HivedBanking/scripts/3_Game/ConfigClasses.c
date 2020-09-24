@@ -47,14 +47,14 @@ class HivedBankingModConfig extends UApiConfigBase
 		Print("[BankingMod] CallBack Failed errorCode: " + errorCode);		
 		SetDataReceived(true);
 		BankName = "Bank Offline - " + errorCode;
-		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load,300 * 1000, false);
+		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load, 300 * 1000, false);
 	};
 	
 	override void OnTimeout() {
 		Print("[BankingMod] CallBack Failed errorCode: Timeout");
 		SetDataReceived(true);
 		BankName = "Bank Offline - T";
-		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load,300 * 1000, false);
+		GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load, 300 * 1000, false);
 	};
 	
 	override void OnSuccess(string data, int dataSize) {
@@ -109,9 +109,10 @@ class HivedBankingModConfig extends UApiConfigBase
 	}
 	
 };
+
 ref HivedBankingModConfig m_HivedBankingModConfig;
-ref HivedBankingModConfig GetHivedBankingModConfig(bool RdyToLoad = false){
-	if (!m_HivedBankingModConfig && RdyToLoad){
+ref HivedBankingModConfig GetHivedBankingModConfig(){
+	if (!m_HivedBankingModConfig){
 		 m_HivedBankingModConfig = new HivedBankingModConfig;
 		 m_HivedBankingModConfig.Load();
 	}
@@ -146,6 +147,7 @@ class HivedBankAccount extends UApiConfigBase {
 		Name = identity.GetName();
 		SteamID = identity.GetPlainId();
 		
+		Balance = GetHivedBankingModConfig().StartingBalance;
 		SetDefaults();
 		Load(GUID);
 	}

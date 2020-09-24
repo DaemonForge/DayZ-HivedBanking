@@ -7,7 +7,7 @@ modded class MissionBase extends MissionBaseWorld
 	
 	override void UniversalApiReady(){
 		super.UniversalApiReady();
-		GetHivedBankingModConfig( true );
+		GetHivedBankingModConfig();
 	}
 	
 	override UIScriptedMenu CreateScriptedMenu (int id) {

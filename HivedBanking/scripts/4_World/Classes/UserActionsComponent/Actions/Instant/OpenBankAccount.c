@@ -14,6 +14,17 @@ class ActionAccessHivedAccount extends ActionInteractBase
 		return true;
 	}
 	
+	override void OnExecuteServer( ActionData action_data )
+	{
+		super.OnExecuteServer( action_data );
+		PlayerBase player = PlayerBase.Cast( action_data.m_Player);
+		if (player && GetGame().IsServer()){
+			PlayerIdentity identity = PlayerIdentity.Cast(player.GetIdentity());
+			if (identity){ //Make sure server has most recent copy of the Banking Data
+				BankAccounts().Get(identity.GetId()).Load(identity.GetId());
+			}
+		}
+	}
 
 	override void OnExecuteClient( ActionData action_data ){
 		super.OnExecuteClient( action_data );

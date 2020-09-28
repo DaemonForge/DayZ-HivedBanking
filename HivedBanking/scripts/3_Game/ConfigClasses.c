@@ -22,6 +22,10 @@ class HivedBankingModConfig extends UApiConfigBase
 		}
 	}
 	
+	void SaveTransaction(){
+	
+	}
+	
 	override void OnDataReceive(){
 		SetDataReceived();
 		Print("Banking Data Received: " + this.ToJson());
@@ -142,10 +146,10 @@ class HivedBankAccount extends UApiConfigBase {
 	float LimitBonus = 0;
 	float Balance = 0;
 	
-	void LoadAccount(PlayerIdentity identity){
-		GUID = identity.GetId();
-		Name = identity.GetName();
-		SteamID = identity.GetPlainId();
+	void LoadAccount(string guid, string name = "", string steamid = ""){
+		GUID = guid;
+		Name = name;
+		SteamID = steamid;
 		
 		Balance = GetHivedBankingModConfig().StartingBalance;
 		SetDefaults();
@@ -194,4 +198,6 @@ class HivedBankAccount extends UApiConfigBase {
 			Print("[BankingMod] HivedBankAccount Failed errorCode: Invalid Data");
 		}
 	}
+	
+	
 };

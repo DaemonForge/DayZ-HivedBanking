@@ -19,33 +19,19 @@ class HivedBankAccounts{
 	void Init(){
 	
 	}
-	
-	void SaveAll(){
-		if (m_BankAccounts.Count() > 0){
-			SaveNext(0);
-		}
-	}
-	
-	void SaveNext(int i){
-		if (i < m_BankAccounts.Count()){
-			m_BankAccounts.GetElement(i).Save();
-			i++;
-			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.SaveNext, 50, false, i); //Making a Delayed Save List
-		}
-	}
-	
-	void OnConnect(PlayerIdentity identity){
-		if (PlayerIdentity.Cast(identity) && !Get(identity.GetId())){
+		
+	void OnConnect(string guid, string name, string steamid){
+		if (!Get(guid)){
 			ref HivedBankAccount tempAccount = new ref HivedBankAccount;
-			tempAccount.LoadAccount(identity);
+			tempAccount.LoadAccount(guid, name, steamid);
 			Add(tempAccount);
+		} else {
+			Get(guid).LoadAccount(guid);
 		}
 	}
 	
-	void OnDisConnect(PlayerIdentity identity){
-		if (PlayerIdentity.Cast(identity)){
-			Remove(identity.GetId());
-		}
+	void OnDisConnect(string guid){
+		Save(guid);
 	}
 	
 	void Add(ref HivedBankAccount account_data){
@@ -58,8 +44,7 @@ class HivedBankAccounts{
 	
 	void Remove(string guid){
 		if ( Get(guid) ){
-			Get(guid).Save();
-			GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(m_BankAccounts.Remove, 10, false, guid);
+			Save(guid);
 		}
 	}
 	

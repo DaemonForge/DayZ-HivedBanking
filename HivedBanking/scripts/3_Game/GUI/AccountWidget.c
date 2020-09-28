@@ -84,7 +84,7 @@ class HivedBankingWidget extends UIScriptedMenu
 		if ( !ctx.Read( data ) ) return;
 		string GUID = data.param1;
 		float PlayerAmmount = data.param2;
-		Print("[HivedBanking] ReceivePlayerAmmount " + PlayerAmmount);
+		//Print("[HivedBanking] ReceivePlayerAmmount " + PlayerAmmount);
 		m_PlayerBalance.SetText("On You: $" + MakeNiceString(PlayerAmmount));
 		
 		GetGame().GetPlayer().UpdateInventoryMenu();
@@ -92,7 +92,7 @@ class HivedBankingWidget extends UIScriptedMenu
 	
 	void DoWarning(string warningMessage){
 		m_WarningMessage.SetText(warningMessage);
-		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ClearWarning, 15 * 1000, false);
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ClearWarning, 10 * 1000, false);
 	}
 	
 	void ClearWarning(){
@@ -180,7 +180,7 @@ class HivedBankingWidget extends UIScriptedMenu
 		if (OrginalString.Length() <= 3){
 			return OrginalString;
 		} 
-		Print("MakeNiceString ORG: "  + DollarAmount);
+		//Print("MakeNiceString ORG: "  + DollarAmount);
 		int StrLen = OrginalString.Length() - 3;
 		string StrSelection = OrginalString.Substring(StrLen,3);
 		NiceString = StrSelection;
@@ -191,7 +191,7 @@ class HivedBankingWidget extends UIScriptedMenu
 		}
 		StrSelection = OrginalString.Substring(0,StrLen);
 		NiceString = StrSelection + "," + NiceString;
-		Print("MakeNiceString NiceString: "  + NiceString);
+		//Print("MakeNiceString NiceString: "  + NiceString);
 		return NiceString;
 	}
 	

@@ -28,7 +28,6 @@ class HivedBankingModConfig extends UApiConfigBase
 	
 	override void OnDataReceive(){
 		SetDataReceived();
-		Print("Banking Data Received: " + this.ToJson());
 		SortMoney();
 	}
 	
@@ -147,6 +146,7 @@ class HivedBankAccount extends UApiConfigBase {
 	float Balance = 0;
 	
 	void LoadAccount(string guid, string name = "", string steamid = ""){
+		SetDataReceived(false);
 		GUID = guid;
 		Name = name;
 		SteamID = steamid;
@@ -170,7 +170,6 @@ class HivedBankAccount extends UApiConfigBase {
 	override string ToJson(){
 		string jsonString = JsonFileLoader<HivedBankAccount>.JsonMakeData(this);;
 		bool ok = false;
-		//Print("[UAPI] Debug HivedBankAccount:" + jsonString);
 		return jsonString;
 	}
 	
@@ -190,7 +189,6 @@ class HivedBankAccount extends UApiConfigBase {
 	}
 	
 	override void OnSuccess(string data, int dataSize) {
-		Print("[UAPI] Debug HivedBankAccount OnSuccess:" + data);
 		JsonFileLoader<HivedBankAccount>.JsonLoadData(data, this);
 		if (this.GUID != ""){
 			OnDataReceive();

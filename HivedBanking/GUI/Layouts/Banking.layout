@@ -161,6 +161,7 @@ FrameWidgetClass rootFrame {
        }
       }
       FrameWidgetClass ButtonsFrame {
+       clipchildren 0
        ignorepointer 1
        position 0.02 0.28
        size 0.42 0.22
@@ -229,8 +230,9 @@ FrameWidgetClass rootFrame {
          }
         }
         TextWidgetClass Warning_Message {
+         clipchildren 0
          ignorepointer 1
-         color 0.6235 0.1569 0.1569 1
+         color 0.8353 0.2078 0.2078 1
          position 0 0
          size 1 0.43
          halign right_ref
@@ -239,7 +241,7 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "Insuficent Funds"
-         font "gui/fonts/metron-italic14"
+         font "gui/fonts/metron-bolditalic"
          "text color" 0.8431 0.1137 0.0235 1
          "exact text" 0
          "text halign" right

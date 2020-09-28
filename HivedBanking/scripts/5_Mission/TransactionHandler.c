@@ -20,7 +20,6 @@ class HBTransactionHandler{
 		string GUID = data.param1;
 		string TransactionType = data.param2;
 		float TransactionValue = data.param3;
-		Print("[HivedBanking] TransactionHandler RPCBankingtransaction TransactionType" + TransactionType + "TransactionValue" + TransactionValue );
 		if (GUID == identity.GetId()){
 			PlayerBase player = PlayerBase.Cast(UApi().FindPlayer(GUID));
 			if (player && TransactionType == "WITHDRAW"){
@@ -53,14 +52,16 @@ class HBTransactionHandler{
 		if (identity){
 			ref HivedBankAccount Account = BankAccounts().Get(identity.GetId());
 			if (Account){
-				Print("[HivedBanking] TransactionHandler RequestWithdraw " + amount);
+				//Print("[HivedBanking] TransactionHandler RequestWithdraw " + amount);
 				string WarningMessage ="";
 				if (Account.Balance < amount){
 					WarningMessage = "Insufficient Funds";
 					amount = Account.Balance;
 				}
 				Transaction(Account, HBConstants.Withdraw, amount);
-				GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(NULL, WarningMessage) , true, identity);
+				if (WarningMessage != ""){
+					GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(NULL, WarningMessage) , true, identity);
+				}
 			}
 		}
 	}
@@ -70,7 +71,7 @@ class HBTransactionHandler{
 		if (identity){
 			ref HivedBankAccount Account = BankAccounts().Get(identity.GetId());
 			if (Account){
-				Print("[HivedBanking] TransactionHandler RequestDeposit " + amount);
+				//Print("[HivedBanking] TransactionHandler RequestDeposit " + amount);
 				float PlayerBalance = player.HBGetPlayerBalance();
 				string WarningMessage ="";
 				if ( PlayerBalance < amount ){
@@ -82,14 +83,13 @@ class HBTransactionHandler{
 				if (NewBalance > AccountLimit){
 					float OverLimit = NewBalance - AccountLimit;
 					amount = amount - OverLimit;
-					Print( "AccountLimit " + AccountLimit + " NewBalance " + NewBalance + " OverLimit " + OverLimit + " amount " + amount);
 					WarningMessage = "Trying to deposit more than your limit";
 				}
 				if (amount > 0){
 					Transaction(Account, HBConstants.Deposit, amount);
-					GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(Account, WarningMessage) , true, identity);
-				} else {
 					GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(NULL, WarningMessage) , true, identity);
+				} else if (WarningMessage != ""){
+					GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(Account, WarningMessage) , true, identity);
 				}				
 			}
 		}
@@ -97,7 +97,7 @@ class HBTransactionHandler{
 	}
 	
 	void Transaction(ref HivedBankAccount account, int transactionType, float amount){
-		Print("[HivedBanking] TransactionHandler Transaction " + account.GUID + " transactionType" + transactionType + " Amount " + amount);
+		Print("[HivedBanking] TransactionHandler Transaction: " + account.GUID + " transactionType: " + transactionType + " Amount: " + amount);
 		float orgBalance = account.Balance;
 		ref HBTransactionCallBack transactionCallBack = new ref HBTransactionCallBack;
 		transactionCallBack.SetTransaction(account.GUID, amount, transactionType, account);

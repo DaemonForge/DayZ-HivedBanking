@@ -27,7 +27,7 @@ modded class PlayerBase extends ManBase
 	
 	int HBAddMoney(float Amount){
 		if (Amount <= 0){
-			return 0;
+			return 2;
 		}
 		int Return = 0;
 		float AmountToAdd = Amount;
@@ -38,29 +38,28 @@ modded class PlayerBase extends ManBase
 		float OptimalPlayerBalance = PlayerBalance + AmountToAdd;
 		
 		HBMoneyValue MoneyValue = GetHivedBankingModConfig().GetHighestDenomination(AmountToAdd);
-		while (MoneyValue && PlayerBalance < OptimalPlayerBalance && NoError){
+		int MaxLoop = 5000;
+		while (MoneyValue && AmountToAdd >= SmallestCurrency && NoError && MaxLoop > 0){
+			MaxLoop--;
 			int AmountToSpawn = GetHivedBankingModConfig().GetAmount(MoneyValue,AmountToAdd);
 			if (AmountToSpawn == 0){
 				NoError = false;
 			}
-			HBCreateMoneyInventory(MoneyValue.Item, AmountToSpawn);
-			PlayerBalance = HBGetPlayerBalance();
-			AmountToAdd = OptimalPlayerBalance - PlayerBalance;
+			
+			int AmountLeft = HBCreateMoneyInventory(MoneyValue.Item, AmountToSpawn);
+			if (AmountLeft > 0){
+				Return = 1;
+				HBCreateMoneyGround(MoneyValue.Item, AmountLeft);
+			}
+			
+			float AmmountAdded = MoneyValue.Value * AmountToSpawn;
+			
+			AmountToAdd = AmountToAdd - AmmountAdded;
+			
 			HBMoneyValue NewMoneyValue = GetHivedBankingModConfig().GetHighestDenomination(AmountToAdd);
 			if (NewMoneyValue && NewMoneyValue != MoneyValue){
 				MoneyValue = NewMoneyValue;
-			} else if (NewMoneyValue){
-				int AmountToSpawnGround = GetHivedBankingModConfig().GetAmount(MoneyValue,AmountToAdd);
-				if (AmountToSpawnGround < 1){
-					NoError = false;
-				} else {
-					HBCreateMoneyGround(MoneyValue.Item, AmountToSpawnGround);
-					float BalanceDiff = MoneyValue.Value * AmountToSpawnGround;
-					PlayerBalance = PlayerBalance + BalanceDiff;
-					Return = 1;
-					MoneyValue = GetHivedBankingModConfig().GetHighestDenomination(AmountToAdd);
-				}
-			}else{
+			} else {
 				NoError = false;
 			}
 		}
@@ -68,10 +67,11 @@ modded class PlayerBase extends ManBase
 	}
 	
 	
-	void HBRemoveMoney(float Amount){
+	int HBRemoveMoney(float Amount){
 		if (Amount <= 0){
-			return;
+			return 2;
 		}
+		int Return = 0;
 		float AmountToRemove = Amount;
 		int LastIndex = GetHivedBankingModConfig().MoneyValues.Count() - 1;
 		float SmallestCurrency = GetHivedBankingModConfig().MoneyValues.Get(LastIndex).Value;
@@ -81,13 +81,16 @@ modded class PlayerBase extends ManBase
 		}
 		if (AmountToRemove >= SmallestCurrency){ // Now to delete a larger bill and make change
 			for (int j = LastIndex; j >= 0; j--){
+				//Print("[HivedBanking] Trying to remove " + GetHivedBankingModConfig().MoneyValues.Get(j).Item);
 				float NewAmountToRemove =  HBRemoveMoneyInventory(GetHivedBankingModConfig().MoneyValues.Get(j), GetHivedBankingModConfig().MoneyValues.Get(j).Value);
 				if (NewAmountToRemove == 0){
 					float AmountToAddBack = GetHivedBankingModConfig().MoneyValues.Get(j).Value - AmountToRemove;
-					HBAddMoney(AmountToAddBack);
+					//Print("[HivedBanking] A " + GetHivedBankingModConfig().MoneyValues.Get(j).Item + " removed trying to add back " + AmountToAddBack );
+					Return = HBAddMoney(AmountToAddBack);
 				}
 			}
 		}
+		return Return;
 	}
 	
 	//Return how much left still to remove
@@ -137,7 +140,7 @@ modded class PlayerBase extends ManBase
 	}
 	
 	//Return How many Items it faild to create in the Inventory
-	void HBCreateMoneyInventory(string itemType, int amount)
+	int HBCreateMoneyInventory(string itemType, int amount)
 	{
 		array<EntityAI> itemsArray = new array<EntityAI>;
 		this.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
@@ -161,7 +164,7 @@ modded class PlayerBase extends ManBase
 			{
 				if (currentAmount <= 0){
 					this.UpdateInventoryMenu(); // RPC-Call needed?
-					return;
+					return 0;
 				}
 				Class.CastTo(item, itemsArray.Get(i));
 				string itemPlayerClassname = "";
@@ -189,30 +192,31 @@ modded class PlayerBase extends ManBase
 				}
 			}
 		}
-		
+		bool stoploop = false;
+		int MaxLoop = 5000;
 		//any leftover or new stacks
-		while (currentAmount > 0)
+		while (currentAmount > 0 && !stoploop && MaxLoop > 0)
 		{
+			MaxLoop--;
 			ItemBase newItem = ItemBase.Cast(this.GetInventory().CreateInInventory(itemType));
-			if (!newItem)
-			{
-				for (int j = 0; j < itemsArray.Count(); j++)
-				{
+			if (!newItem){
+				stoploop = true; //To stop the loop from running away since it couldn't create an item
+				for (int j = 0; j < itemsArray.Count(); j++){
 					Class.CastTo(item, itemsArray.Get(j));
-					if (!item){
-						continue;
-					}
-					newItem = ItemBase.Cast(item.GetInventory().CreateInInventory(itemType)); //CreateEntityInCargo	
-					if (newItem){
-						break;
+					if (item){ 
+						newItem = ItemBase.Cast(item.GetInventory().CreateInInventory(itemType)); //CreateEntityInCargo	
+						if (newItem){
+							//Print("[HivedBanking] NewItem Created " + newItem.GetType() + " in " + item.GetType());
+							stoploop = false; //Item was created so we can don't need to stop the loop anymore
+							break;
+						}
 					}
 				}
 			}
 			
 			Magazine newMagItem = Magazine.Cast(newItem);
 			Ammunition_Base newammoItem = Ammunition_Base.Cast(newItem);
-			if (newMagItem && !newammoItem)					
-			{	
+			if (newMagItem && !newammoItem)	{	
 				int SetAmount = currentAmount;
 				if (newMagItem.GetQuantityMax() <= currentAmount){
 					SetAmount = currentAmount;
@@ -222,9 +226,7 @@ modded class PlayerBase extends ManBase
 					currentAmount = currentAmount - SetAmount;
 				}
 				newMagItem.ServerSetAmmoCount(SetAmount);
-			}
-			if (hasSomeQuant)
-			{
+			} else if (hasSomeQuant){
 				if (newammoItem){
 					currentAmount = newammoItem.HBSetQuantity(currentAmount);
 	
@@ -233,9 +235,12 @@ modded class PlayerBase extends ManBase
 				if (Class.CastTo(newItemBase, newItem)){
 					currentAmount = newItemBase.HBSetQuantity(currentAmount);
 				}
+			} else { //It created just one of the item
+				currentAmount--;
 			}
 		}
-		this.UpdateInventoryMenu(); // RPC-Call needed?
+		return currentAmount;
+		this.UpdateInventoryMenu();
 	}
 	
 	//Return How many Items it faild to create in on the ground

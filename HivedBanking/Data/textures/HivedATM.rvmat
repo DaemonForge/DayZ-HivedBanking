@@ -56,7 +56,7 @@ class Stage4
 };
 class Stage5
 {
-    texture="HackingMod\Data\textures\HivedATM_co.paa";
+    texture="HivedBanking\Data\textures\HivedATM_co.paa";
     uvSource="tex";
     class uvTransform
     {

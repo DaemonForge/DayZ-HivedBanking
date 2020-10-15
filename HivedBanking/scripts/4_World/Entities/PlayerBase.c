@@ -38,7 +38,7 @@ modded class PlayerBase extends ManBase
 		float OptimalPlayerBalance = PlayerBalance + AmountToAdd;
 		
 		HBMoneyValue MoneyValue = GetHivedBankingModConfig().GetHighestDenomination(AmountToAdd);
-		int MaxLoop = 5000;
+		int MaxLoop = 3000;
 		while (MoneyValue && AmountToAdd >= SmallestCurrency && NoError && MaxLoop > 0){
 			MaxLoop--;
 			int AmountToSpawn = GetHivedBankingModConfig().GetAmount(MoneyValue,AmountToAdd);
@@ -144,37 +144,27 @@ modded class PlayerBase extends ManBase
 	{
 		array<EntityAI> itemsArray = new array<EntityAI>;
 		this.GetInventory().EnumerateInventory(InventoryTraversalType.PREORDER, itemsArray);
-		string itemLower = itemType;
-		itemLower.ToLower();
-
+		string itemTypeLower = itemType;
+		itemTypeLower.ToLower();
 		ItemBase item;
 		Ammunition_Base ammoItem;
 		int currentAmount = amount;
-		//if item doesn't have count, quantity or it has quantitybar then we should spawn one item instead of trying to stack it
-		//if item has quantitybar we should spawn one with full bar? maybe make it an option for stuff like gasoline canister
-		bool hasSomeQuant = ((HBMaxQuantity(itemType) > 0) || HBHasQuantity(itemType));		
-		int itemHasSpawnedOrStacked = 0;
-		//autostacking
-		//check if we have any stackable items of the type itemType
-		//if we do, then add to each stack until no more stacks found or out of amount
-		//we should keep count of how many items we spawned
-		if (hasSomeQuant)
-		{
-			for (int i = 0; i < itemsArray.Count(); i++)
-			{
+		bool hasQuantity = ((HBMaxQuantity(itemType) > 0) || HBHasQuantity(itemType));
+		if (hasQuantity){
+			for (int i = 0; i < itemsArray.Count(); i++){
 				if (currentAmount <= 0){
 					this.UpdateInventoryMenu(); // RPC-Call needed?
 					return 0;
 				}
 				Class.CastTo(item, itemsArray.Get(i));
-				string itemPlayerClassname = "";
+				string itemPlayerType = "";
 				if (item){
 					if (item.IsRuined()){
 						continue;
 					}
-					itemPlayerClassname = item.GetType();
-					itemPlayerClassname.ToLower();
-					if (itemLower == itemPlayerClassname && !item.IsFullQuantity() && !item.IsMagazine()){
+					itemPlayerType = item.GetType();
+					itemPlayerType.ToLower();
+					if (itemTypeLower == itemPlayerType && !item.IsFullQuantity() && !item.IsMagazine()){
 						currentAmount = item.HBAddQuantity(currentAmount);
 					}
 				}
@@ -184,9 +174,9 @@ modded class PlayerBase extends ManBase
 					if (ammoItem.IsRuined()){	
 						continue;
 					}
-					itemPlayerClassname = ammoItem.GetType();
-					itemPlayerClassname.ToLower();
-					if (itemLower == itemPlayerClassname && ammoItem.IsAmmoPile()){
+					itemPlayerType = ammoItem.GetType();
+					itemPlayerType.ToLower();
+					if (itemTypeLower == itemPlayerType && ammoItem.IsAmmoPile()){
 						currentAmount = ammoItem.HBAddQuantity(currentAmount);
 					}
 				}
@@ -195,8 +185,7 @@ modded class PlayerBase extends ManBase
 		bool stoploop = false;
 		int MaxLoop = 5000;
 		//any leftover or new stacks
-		while (currentAmount > 0 && !stoploop && MaxLoop > 0)
-		{
+		while (currentAmount > 0 && !stoploop && MaxLoop > 0){
 			MaxLoop--;
 			ItemBase newItem = ItemBase.Cast(this.GetInventory().CreateInInventory(itemType));
 			if (!newItem){
@@ -207,7 +196,7 @@ modded class PlayerBase extends ManBase
 						newItem = ItemBase.Cast(item.GetInventory().CreateInInventory(itemType)); //CreateEntityInCargo	
 						if (newItem){
 							//Print("[HivedBanking] NewItem Created " + newItem.GetType() + " in " + item.GetType());
-							stoploop = false; //Item was created so we can don't need to stop the loop anymore
+							stoploop = false; //Item was created so we don't need to stop the loop anymore
 							break;
 						}
 					}
@@ -226,7 +215,7 @@ modded class PlayerBase extends ManBase
 					currentAmount = currentAmount - SetAmount;
 				}
 				newMagItem.ServerSetAmmoCount(SetAmount);
-			} else if (hasSomeQuant){
+			} else if (hasQuantity){
 				if (newammoItem){
 					currentAmount = newammoItem.HBSetQuantity(currentAmount);
 	
@@ -243,10 +232,9 @@ modded class PlayerBase extends ManBase
 		this.UpdateInventoryMenu();
 	}
 	
-	//Return How many Items it faild to create in on the ground
 	void HBCreateMoneyGround(string Type, int Amount){
 		int AmountToSpawn = Amount;
-		bool hasSomeQuant = ((HBMaxQuantity(Type) > 0) || HBHasQuantity(Type));
+		bool HasQuantity = ((HBMaxQuantity(Type) > 0) || HBHasQuantity(Type));
 		int MaxQuanity = HBMaxQuantity(Type);
 		int StacksRequired = AmountToSpawn;
 		if (MaxQuanity != 0){
@@ -255,7 +243,7 @@ modded class PlayerBase extends ManBase
 		for (int i = 0; i <= StacksRequired; i++){
 			if (AmountToSpawn > 0){
 				ItemBase newItem = ItemBase.Cast(GetGame().CreateObjectEx(Type, GetPosition(), ECE_PLACE_ON_SURFACE));
-				if (newItem && hasSomeQuant){
+				if (newItem && HasQuantity){
 					AmountToSpawn = newItem.HBSetQuantity(AmountToSpawn);
 				}
 			}

@@ -8,7 +8,7 @@ PixelShaderID="Super";
 VertexShaderID="Super";
 class Stage1
 {
-    texture="HivedBanking\Data\textures\HivedATM_Small_NoHq.paa";
+    texture="HivedBanking\Data\textures\atm_small_nohq.paa";
     uvSource="tex";
     class uvTransform
     {
@@ -56,7 +56,7 @@ class Stage4
 };
 class Stage5
 {
-    texture="HivedBanking\Data\textures\HivedATM_co.paa";
+    texture="HivedBanking\Data\textures\atm_small_smdi.paa";
     uvSource="tex";
     class uvTransform
     {

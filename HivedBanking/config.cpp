@@ -73,10 +73,43 @@ class CfgVehicles
 		displayName  = "Hived Atm Small";
 		model = "HivedBanking\Data\HivedAtm_Small.p3d";
 		hiddenSelections[] = {        
-			"zbytek"
+			"zbytek", "full_atm"
 		};
 		hiddenSelectionsTextures[] = {
-			"HivedBanking\Data\textures\HivedAtm_Small_co.paa" 
+			"HivedBanking\Data\textures\atm_small_grey_co.paa", 
+			"HivedBanking\Data\textures\atm_small_grey_co.paa" 
+		};  
+		
+	};
+	class HivedAtmSmall_Black : HivedAtmSmall{
+		scope = 1;
+		hiddenSelectionsTextures[] = {
+			"HivedBanking\Data\textures\atm_small_black_co.paa" , 
+			"HivedBanking\Data\textures\atm_small_black_co.paa" 
+		};  
+		
+	};
+	class HivedAtmSmall_Blue : HivedAtmSmall{
+		scope = 1;
+		hiddenSelectionsTextures[] = {
+			"HivedBanking\Data\textures\atm_small_blue_co.paa" , 
+			"HivedBanking\Data\textures\atm_small_blue_co.paa" 
+		};  
+		
+	};
+	class HivedAtmSmall_Green : HivedAtmSmall{
+		scope = 1;
+		hiddenSelectionsTextures[] = {
+			"HivedBanking\Data\textures\atm_small_green_co.paa" , 
+			"HivedBanking\Data\textures\atm_small_green_co.paa" 
+		};  
+		
+	};
+	class HivedAtmSmall_Red : HivedAtmSmall{
+		scope = 1;
+		hiddenSelectionsTextures[] = {
+			"HivedBanking\Data\textures\atm_small_red_co.paa" , 
+			"HivedBanking\Data\textures\atm_small_red_co.paa" 
 		};  
 		
 	};

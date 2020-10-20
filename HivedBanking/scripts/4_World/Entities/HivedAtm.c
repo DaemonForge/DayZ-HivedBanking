@@ -5,7 +5,19 @@ class HivedAtm extends BuildingSuper {
 	}
 }
 
+
+
 class HivedAtmSmall extends HivedAtm {}
+
+class HivedAtmSmall_Black extends HivedAtm {}
+
+class HivedAtmSmall_Blue extends HivedAtm {}
+
+class HivedAtmSmall_Green extends HivedAtm {}
+
+class HivedAtmSmall_Red extends HivedAtm {}
+
+
 
 class HivedAtmMedium extends HivedAtm {}
 

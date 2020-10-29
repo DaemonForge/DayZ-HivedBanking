@@ -16,10 +16,12 @@ class HivedBankingWidget extends UIScriptedMenu
 	protected ref TextWidget			m_BankLimit;
 	protected ref TextWidget			m_PlayerBalance;
 	protected ref TextWidget			m_WarningMessage;
+	protected ref TextWidget			m_DollarSign;
 	protected ref EditBoxWidget			m_Amount;
 	protected ref Widget				m_ConnectingFrame;
 	protected ref TextWidget			m_Connecting;
-	
+	protected ref Widget				m_BankBalBorder;
+	protected ref Widget				m_AmountBorder;
 	
 	protected ref ButtonWidget			m_DepositButton;
 	protected ref ButtonWidget			m_WithdrawButton;
@@ -46,10 +48,22 @@ class HivedBankingWidget extends UIScriptedMenu
 		m_ConnectingFrame	        = Widget.Cast( layoutRoot.FindAnyWidget( "ConnectingFrame" ) );
 		m_Connecting	   	 		= TextWidget.Cast( layoutRoot.FindAnyWidget( "Connecting" ) );
 		
+		m_BankBalBorder				= Widget.Cast( layoutRoot.FindAnyWidget( "BankBalBorder" ) );
+		m_DollarSign				= TextWidget.Cast( layoutRoot.FindAnyWidget( "DollarSign" ) );
+		m_AmountBorder				= Widget.Cast( layoutRoot.FindAnyWidget( "AmountBorder" ) );
+		
 		ClearWarning();
 		m_BankingBoarder.Show(false);
 		m_BankingPanel.Show(false);
 		m_ConnectingFrame.Show(false);
+		
+		m_ConnectingFrame.SetColor(GetHivedBankingModConfig().GetThemeColour());
+		m_BankBalBorder.SetColor(GetHivedBankingModConfig().GetThemeColour());
+		m_DepositButton.SetColor(GetHivedBankingModConfig().GetThemeColour());
+		m_WithdrawButton.SetColor(GetHivedBankingModConfig().GetThemeColour());
+		m_DollarSign.SetColor(GetHivedBankingModConfig().GetThemeColour());
+		m_AmountBorder.SetColor(GetHivedBankingModConfig().GetThemeColour());
+		
 		return layoutRoot;
     }
 

@@ -13,14 +13,16 @@ FrameWidgetClass rootFrame {
   PanelWidgetClass BankingBoarder {
    ignorepointer 1
    color 0.8314 0.8314 0.8314 1
-   position 0.1 0.15
-   size 0.45 0.45
+   position 0 0
+   size 0.3 0.35
+   halign center_ref
+   valign center_ref
    hexactpos 0
    vexactpos 0
    hexactsize 0
    vexactsize 0
    draggable 1
-   style blank
+   style Outline
    {
     PanelWidgetClass BankingPanel {
      ignorepointer 0
@@ -38,9 +40,9 @@ FrameWidgetClass rootFrame {
      {
       PanelWidgetClass BankBalBorder {
        ignorepointer 1
-       color 0.0078 0.5333 0.8196 1
+       color 0 0 0 1
        position 0 0.25
-       size 0.6 0.2
+       size 0.7 0.2
        halign center_ref
        hexactpos 0
        vexactpos 0
@@ -57,56 +59,34 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "$00000"
-         font "HivedBanking/gui/Fonts/ddinbold32"
          "text halign" center
          "text valign" center
         }
        }
       }
-      GridSpacerWidgetClass PlyBalBorder {
+      PanelWidgetClass PlyBalBorder {
        ignorepointer 1
        color 0 0 0 1
-       size 1 0.06
-       halign center_ref
+       position 0.015 0.03
+       size 0.4 0.12
        valign bottom_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Empty
-       Padding 0
-       Margin 0
-       Columns 2
-       Rows 1
+       style Outline
        {
         TextWidgetClass PlayerBalance {
          ignorepointer 1
          position 0.02 0.15
-         size 150 48
+         size 0.96 0.7
          hexactpos 0
          vexactpos 0
-         hexactsize 1
-         vexactsize 1
+         hexactsize 0
+         vexactsize 0
          text "On You: 10000"
-         font "HivedBanking/gui/Fonts/ddin22"
-         "text offset" 15 -5
+         font "gui/fonts/etelkatextpro14"
          "exact text" 1
-         "text valign" center
-        }
-        TextWidgetClass Limit {
-         ignorepointer 1
-         size 150 48
-         halign center_ref
-         valign center_ref
-         hexactpos 0
-         vexactpos 0
-         hexactsize 1
-         vexactsize 1
-         text "Limit: $1000000"
-         font "HivedBanking/gui/Fonts/ddin22"
-         "text offset" -15 -5
-         "exact text" 1
-         "text halign" right
          "text valign" center
         }
        }
@@ -132,7 +112,7 @@ FrameWidgetClass rootFrame {
          vexactsize 0
          style Normal
          text "Multi World Bank"
-         font "HivedBanking/gui/Fonts/ddinbold32"
+         font "gui/fonts/metron-bold48"
          "exact text" 1
          "size to text h" 0
          "size to text v" 0
@@ -143,11 +123,9 @@ FrameWidgetClass rootFrame {
       }
       PanelWidgetClass AmountBorder {
        ignorepointer 1
-       color 0.0078 0.5333 0.8196 1
-       position 0 0.05
-       size 0.6 0.12
-       halign center_ref
-       valign center_ref
+       position 0.05 0.28
+       size 0.5 0.12
+       valign bottom_ref
        hexactpos 0
        vexactpos 0
        hexactsize 0
@@ -155,8 +133,8 @@ FrameWidgetClass rootFrame {
        style Outline
        {
         EditBoxWidgetClass Amount {
-         position 0.02 0
-         size 0.85 1
+         position 0.01 0
+         size 0.85 0.95
          halign right_ref
          valign center_ref
          hexactpos 0
@@ -171,22 +149,107 @@ FrameWidgetClass rootFrame {
         }
         TextWidgetClass DollarSign {
          ignorepointer 1
-         color 0.0078 0.5333 0.8196 1
-         position 0.02 0
-         size 0.09 1
+         position 0.03 0
+         size 0.09 0.95
          valign center_ref
          hexactpos 0
          vexactpos 0
          hexactsize 0
          vexactsize 0
          text "$"
-         "text halign" center
+        }
+       }
+      }
+      FrameWidgetClass ButtonsFrame {
+       clipchildren 0
+       ignorepointer 1
+       position 0.02 0.28
+       size 0.42 0.22
+       halign right_ref
+       valign bottom_ref
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       {
+        ButtonWidgetClass Deposit_Button {
+         color 0 0.0667 0.2706 0.7804
+         position 0.12 0
+         size 0.35 0.53
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style DayZDefaultButtonNoBorder
+         switch normal
+         {
+          TextWidgetClass Deposit_Button_Label {
+           ignorepointer 1
+           size 1 0.8
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "DEPOSIT"
+           font "gui/fonts/amorserifpro-bold14"
+           "text halign" center
+           "text valign" center
+          }
+         }
+        }
+        ButtonWidgetClass Withdraw_Button {
+         color 0 0.0667 0.2706 0.7804
+         position 0 0
+         size 0.48 0.53
+         halign right_ref
+         valign bottom_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         style DayZDefaultButtonNoBorder
+         switch normal
+         {
+          TextWidgetClass Withdraw_Button_Label {
+           ignorepointer 1
+           size 1 0.8
+           halign center_ref
+           valign center_ref
+           hexactpos 0
+           vexactpos 0
+           hexactsize 0
+           vexactsize 0
+           text "WITHDRAW"
+           font "gui/fonts/amorserifpro-bold14"
+           "text halign" center
+           "text valign" center
+          }
+         }
+        }
+        TextWidgetClass Warning_Message {
+         clipchildren 0
+         ignorepointer 1
+         color 0.8353 0.2078 0.2078 1
+         position 0 0
+         size 1 0.43
+         halign right_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Insuficent Funds"
+         font "gui/fonts/metron-bolditalic"
+         "text color" 0.8431 0.1137 0.0235 1
+         "exact text" 0
+         "text halign" right
          "text valign" center
         }
        }
       }
       PanelWidgetClass LimitBorder {
-       visible 0
        ignorepointer 1
        color 0 0 0 1
        position 0.015 0.03
@@ -198,6 +261,23 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 0
        style Outline
+       {
+        TextWidgetClass Limit {
+         ignorepointer 1
+         size 0.97 0.92
+         halign center_ref
+         valign center_ref
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         text "Limit: $1000000"
+         font "gui/fonts/etelkatextpro14"
+         "exact text" 1
+         "text halign" right
+         "text valign" center
+        }
+       }
       }
      }
     }
@@ -205,7 +285,6 @@ FrameWidgetClass rootFrame {
      visible 1
      inheritalpha 0
      ignorepointer 1
-     color 0.0078 0.5333 0.8196 1
      size 0.7 0.3
      halign center_ref
      valign center_ref
@@ -239,7 +318,7 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "Connecting . . ."
-         font "HivedBanking/gui/Fonts/ddin22"
+         font "gui/fonts/metronblack-italic28"
          "exact text" 1
          "size to text h" 0
          "size to text v" 0
@@ -247,103 +326,6 @@ FrameWidgetClass rootFrame {
          "text valign" center
         }
        }
-      }
-     }
-    }
-   }
-  }
-  GridSpacerWidgetClass ButtonsFrame {
-   clipchildren 0
-   ignorepointer 1
-   position 0.1 0.15
-   size 0.25 0.45
-   halign right_ref
-   hexactpos 0
-   vexactpos 0
-   hexactsize 0
-   vexactsize 0
-   Padding 15
-   Margin 15
-   Columns 1
-   {
-    TextWidgetClass Warning_Message {
-     clipchildren 0
-     ignorepointer 1
-     color 0.8353 0.2078 0.2078 1
-     position 0 0
-     size 1 0.43
-     halign right_ref
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     text "Insuficent Funds"
-     font "HivedBanking/gui/Fonts/ddin22"
-     "text color" 0.8431 0.1137 0.0235 1
-     "exact text" 0
-     "text halign" center
-     "text valign" center
-    }
-    ButtonWidgetClass Deposit_Button {
-     color 0.0078 0.5333 0.8196 1
-     position 0.12 0
-     size 0.35 0.53
-     valign bottom_ref
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     style DayZDefaultButtonNoBorder
-     "text color" 0 0 0 1
-     switch normal
-     {
-      TextWidgetClass Deposit_Button_Label {
-       ignorepointer 1
-       color 0 0 0 1
-       size 1 0.8
-       halign center_ref
-       valign center_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       text "DEPOSIT"
-       font "HivedBanking/gui/Fonts/ddinbold32"
-       "text color" 0 0 0 1
-       "text halign" center
-       "text valign" center
-      }
-     }
-    }
-    ButtonWidgetClass Withdraw_Button {
-     color 0.0078 0.5333 0.8196 1
-     position 0 0
-     size 0.48 0.53
-     halign right_ref
-     valign bottom_ref
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     style DayZDefaultButtonNoBorder
-     "text color" 0 0 0 1
-     switch normal
-     {
-      TextWidgetClass Withdraw_Button_Label {
-       ignorepointer 1
-       color 0 0 0 1
-       position 0 -0.01
-       size 1 0.8
-       halign center_ref
-       valign center_ref
-       hexactpos 0
-       vexactpos 0
-       hexactsize 0
-       vexactsize 0
-       text "WITHDRAW"
-       font "HivedBanking/gui/Fonts/ddinbold32"
-       "text halign" center
-       "text valign" center
       }
      }
     }

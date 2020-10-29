@@ -1,12 +1,14 @@
 class HivedBankingModConfig extends UApiConfigBase
 { 
-	string ConfigVersion = "1";
+	string ConfigVersion = "2";
 	
 	string BankName = "Multi World Bank";
 	
 	float StartingBalance = 0;
 	float StartingLimit = 1000000;
 	bool CanDepositRuinedBills = false;
+	
+	ref array<int> MenuThemeColour = {2, 136, 209};
 	
 	ref array<ref HBMoneyValue> MoneyValues = new ref array<ref HBMoneyValue>;
 	
@@ -28,6 +30,11 @@ class HivedBankingModConfig extends UApiConfigBase
 	
 	override void OnDataReceive(){
 		SetDataReceived();
+		if (GetGame().IsServer() && ConfigVersion != "2"){
+			ConfigVersion = "2";
+			MenuThemeColour = {2, 136, 209};
+			Save();
+		}
 		SortMoney();
 	}
 	
@@ -61,7 +68,9 @@ class HivedBankingModConfig extends UApiConfigBase
 	};
 	
 	override void OnSuccess(string data, int dataSize) {
+		Print("[BankingMod] CallBack OnSuccess data" + data);
 		JsonFileLoader<HivedBankingModConfig>.JsonLoadData(data, this);
+		Print("[BankingMod] CallBack OnSuccess data Loaded");
 		if (this){
 			OnDataReceive();
 		} else {
@@ -109,6 +118,13 @@ class HivedBankingModConfig extends UApiConfigBase
 			return Math.Floor(amount / MoneyObj.Value);
 		} 
 		return 0;
+	}
+	
+	int GetThemeColour(){
+        float r = MenuThemeColour[0];
+        float g = MenuThemeColour[1];
+        float b = MenuThemeColour[2];
+		return ARGB(255, r, g, b);
 	}
 	
 };

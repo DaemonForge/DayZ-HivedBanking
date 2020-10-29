@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{E1527B08119FAB05}HivedBanking/GUI/fonts/ddin32.edds"
+ Author "desktop-3up08te"
+ ChangeDate -1059051175
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "ddin32.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

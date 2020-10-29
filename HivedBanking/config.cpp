@@ -4,6 +4,7 @@ class CfgPatches
 	{
 		requiredVersion=0.1;
 		requiredAddons[]={
+			"HivedBankingDefine",
 			"UniversalApi"
 		};
 	};
@@ -28,7 +29,6 @@ class CfgMods
             {
 				value = "";
                 files[]={
-					"HivedBanking/scripts/Common",
 					"HivedBanking/scripts/3_Game"
 					};
             };
@@ -37,7 +37,6 @@ class CfgMods
             {
                 value="";
                 files[]={ 
-					"HivedBanking/scripts/Common",
 					"HivedBanking/scripts/4_World" 
 				};
             };
@@ -46,7 +45,6 @@ class CfgMods
             {
                 value="";
                 files[]={
-					"HivedBanking/scripts/Common",
 					"HivedBanking/scripts/5_Mission" 
 				};
             };

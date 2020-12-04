@@ -54,11 +54,16 @@ class HBTransactionHandler{
 			if (Account){
 				//Print("[HivedBanking] TransactionHandler RequestWithdraw " + amount);
 				string WarningMessage ="";
-				if (Account.Balance < amount){
+				if (!Account.DataReceived()){
+					WarningMessage = "Something went wrong";
+				}
+				if ( && Account.Balance < amount){
 					WarningMessage = "Insufficient Funds";
 					amount = Account.Balance;
 				}
-				Transaction(Account, HBConstants.Withdraw, amount);
+				if (Account.DataReceived()){
+					Transaction(Account, HBConstants.Withdraw, amount);
+				}
 				if (WarningMessage != ""){
 					GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(NULL, WarningMessage) , true, identity);
 				}
@@ -74,6 +79,11 @@ class HBTransactionHandler{
 				//Print("[HivedBanking] TransactionHandler RequestDeposit " + amount);
 				float PlayerBalance = player.HBGetPlayerBalance();
 				string WarningMessage ="";
+				
+				if (!Account.DataReceived()){
+					WarningMessage = "Something went wrong";
+				}
+				
 				if ( PlayerBalance < amount ){
 					amount = PlayerBalance;
 					WarningMessage = "Don't have that much on you";
@@ -85,7 +95,7 @@ class HBTransactionHandler{
 					amount = amount - OverLimit;
 					WarningMessage = "Trying to deposit more than your limit";
 				}
-				if (amount > 0){
+				if (Account.DataReceived() && amount > 0){
 					Transaction(Account, HBConstants.Deposit, amount);
 					GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(NULL, WarningMessage) , true, identity);
 				} else if (WarningMessage != ""){
@@ -97,6 +107,10 @@ class HBTransactionHandler{
 	}
 	
 	void Transaction(ref HivedBankAccount account, int transactionType, float amount){
+		if (!account.DataReceived()){
+			Print("[HivedBanking] There was an error with an transaction");
+			return;
+		}
 		Print("[HivedBanking] TransactionHandler Transaction: " + account.GUID + " transactionType: " + transactionType + " Amount: " + amount);
 		float orgBalance = account.Balance;
 		ref HBTransactionCallBack transactionCallBack = new ref HBTransactionCallBack;

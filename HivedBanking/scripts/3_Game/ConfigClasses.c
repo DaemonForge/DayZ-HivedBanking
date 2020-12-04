@@ -161,6 +161,11 @@ class HivedBankAccount extends UApiConfigBase {
 	float LimitBonus = 0;
 	float Balance = 0;
 	
+	[NonSerialized()]
+	bool RetryCount = 0;
+	[NonSerialized()]
+	int RetryType = 0;
+	
 	void LoadAccount(string guid, string name = "", string steamid = ""){
 		SetDataReceived(false);
 		GUID = guid;
@@ -174,11 +179,13 @@ class HivedBankAccount extends UApiConfigBase {
 	
 	override void Load(string ID){
 		SetDataReceived(false);
+		RetryType = 1;
 		UApi().Rest().PlayerLoad("Banking", ID, this, this.ToJson());
 	}
 	
 	override void Save(){
-		if (GetGame().IsServer()){
+		if (GetGame().IsServer() && DataReceived() && RetryType != 1){ // Only if the data has been received should and its not currently trying to 
+			RetryType = 2;
 			UApi().Rest().PlayerSave("Banking", GUID, this.ToJson());
 		}
 	}
@@ -196,20 +203,55 @@ class HivedBankAccount extends UApiConfigBase {
 	
 	
 	override void OnError(int errorCode) {
-		Print("[BankingMod] CallBack Failed errorCode: " + errorCode);		
+		Print("[BankingMod] CallBack Failed errorCode: " + errorCode);
+		
+		RetryCount++;
+		
+		if (RetryCount <= 5){
+			if (RetryType == 1){
+				GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load,  RetryCount * 90 * 1000, false, GUID);
+			}
+			if (RetryType == 2){
+				GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Save, RetryCount * 90 * 1000, false, GUID);
+			}
+		}
+		
 	}
 	
 	override void OnTimeout() {
-		Print("[BankingMod]CallBack Failed errorCode: Timeout");
+		Print("[BankingMod] CallBack Failed errorCode: Timeout");
 		
+		RetryCount++;
+		
+		if (RetryCount <= 5){
+			if (RetryType == 1){
+				GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load, RetryCount * 90 * 1000, false, GUID);
+			}
+			if (RetryType == 2){
+				GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Save, RetryCount * 90 * 1000, false, GUID);
+			}
+		}
 	}
 	
 	override void OnSuccess(string data, int dataSize) {
 		JsonFileLoader<HivedBankAccount>.JsonLoadData(data, this);
 		if (this.GUID != ""){
 			OnDataReceive();
+			RetryType = 0;
+			RetryCount = 0;
 		} else {
 			Print("[BankingMod] HivedBankAccount Failed errorCode: Invalid Data");
+			
+			RetryCount++;
+		
+			if (RetryCount <= 5){
+				if (RetryType == 1){
+					GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Load, RetryCount * 90 * 1000, false, GUID);
+				}
+				if (RetryType == 2){
+					GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(this.Save, RetryCount * 90 * 1000, false, GUID);
+				}
+			}
 		}
 	}
 	

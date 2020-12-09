@@ -40,7 +40,7 @@ class HBTransactionCallBack : RestCallback {
 		string ReturnError = "";
 		PlayerBase player = PlayerBase.Cast(UApi().FindPlayer(GUID)); 
 		if (player){
-			Print("[HivedBanking] TransactionHandler OnSuccess " + GUID + " TransactionType "+ TransactionType + " Amount " + Amount);
+			Print("[HivedBanking] TransactionHandler OnSuccess " + GUID + " TransactionType " + TransactionType + " Amount " + Amount);
 			PlayerIdentity identity = PlayerIdentity.Cast(player.GetIdentity());
 			if (identity){
 				JsonFileLoader<HivedBankAccount>.JsonLoadData(data, Account);

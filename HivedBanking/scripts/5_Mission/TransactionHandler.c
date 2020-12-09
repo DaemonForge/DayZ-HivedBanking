@@ -57,7 +57,7 @@ class HBTransactionHandler{
 				if (!Account.DataReceived()){
 					WarningMessage = "Something went wrong";
 				}
-				if ( && Account.Balance < amount){
+				if (Account.DataReceived() && Account.Balance < amount){
 					WarningMessage = "Insufficient Funds";
 					amount = Account.Balance;
 				}

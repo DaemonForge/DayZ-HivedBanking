@@ -7,6 +7,7 @@ class HivedBankingWidget extends UIScriptedMenu
 	protected bool						m_PanelIsOpen = false; 
 	protected bool						m_IsInitialized = false;
 	protected bool						m_AwaitingTransaction = false;
+	protected bool						m_TransactionLocked = false;
 	
 	
 	protected ref Widget				m_BankingBoarder;
@@ -90,7 +91,10 @@ class HivedBankingWidget extends UIScriptedMenu
 		if (WarningMessage != ""){
 			DoWarning(WarningMessage);
 		}
+		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.ClearTransactionLock, 1000, false);
 	}
+	
+	
 	
 	void RPCReceivePlayerAmmount( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
 	{
@@ -124,6 +128,9 @@ class HivedBankingWidget extends UIScriptedMenu
 		CloseBanking();
     }
 	
+	void ClearTransactionLock(){
+		m_TransactionLocked = false;
+	}
 
 	void BankingInit()	
 	{
@@ -215,11 +222,12 @@ class HivedBankingWidget extends UIScriptedMenu
 			DoWarning("Sorry Bank is currently Offline");
 			return super.OnClick(w, x, y, button);
 		}
-		if (w == m_DepositButton && !m_AwaitingTransaction){
+		if (w == m_DepositButton && !m_AwaitingTransaction && !m_TransactionLocked){
 			float DepositAmount = 0;
 			DepositAmount = m_Amount.GetText().ToFloat();
 			if (DepositAmount > 0){
 				m_AwaitingTransaction = true;
+				m_TransactionLocked = true;
 				GetRPCManager().SendRPC("HBANK", "RPCBankingtransaction", new Param3<string, string, float>(g_BankAccount.GUID,"DEPOSIT", SnapValue(m_Amount.GetText().ToFloat())) , true);
 				m_Amount.SetText("");
 			} else {
@@ -227,11 +235,12 @@ class HivedBankingWidget extends UIScriptedMenu
 			}
 			return true;
 		}
-		if (w == m_WithdrawButton && !m_AwaitingTransaction){
+		if (w == m_WithdrawButton && !m_AwaitingTransaction && !m_TransactionLocked){
 			float WithdrawAmount = 0;
 			WithdrawAmount = m_Amount.GetText().ToFloat();
 			if (WithdrawAmount > 0){
 				m_AwaitingTransaction = true;
+				m_TransactionLocked = true;
 				GetRPCManager().SendRPC("HBANK", "RPCBankingtransaction", new Param3<string, string, float>(g_BankAccount.GUID,"WITHDRAW", SnapValue(m_Amount.GetText().ToFloat())) , true);
 				m_Amount.SetText("");
 			}else {

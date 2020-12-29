@@ -87,7 +87,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 1
          vexactsize 1
-         text "On You: 10000"
+         text "#HB_ONYOU: 10000"
          font "HivedBanking/gui/Fonts/ddin22"
          "text offset" 15 -5
          "exact text" 1
@@ -102,7 +102,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 1
          vexactsize 1
-         text "Limit: $1000000"
+         text "#HB_LIMIT: $1000000"
          font "HivedBanking/gui/Fonts/ddin22"
          "text offset" -15 -5
          "exact text" 1
@@ -238,7 +238,7 @@ FrameWidgetClass rootFrame {
          vexactpos 0
          hexactsize 0
          vexactsize 0
-         text "Connecting . . ."
+         text "#HB_CONNECTING . . ."
          font "HivedBanking/gui/Fonts/ddin22"
          "exact text" 1
          "size to text h" 0
@@ -307,7 +307,7 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "DEPOSIT"
+       text "#HB_DEPOSIT"
        font "HivedBanking/gui/Fonts/ddinbold32"
        "text color" 0 0 0 1
        "text halign" center
@@ -340,7 +340,7 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "WITHDRAW"
+       text "#HB_WITHDRAW"
        font "HivedBanking/gui/Fonts/ddinbold32"
        "text halign" center
        "text valign" center

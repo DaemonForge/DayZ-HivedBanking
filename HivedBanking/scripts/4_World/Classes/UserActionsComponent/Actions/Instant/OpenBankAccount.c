@@ -6,7 +6,7 @@ class ActionAccessHivedAccount extends ActionInteractBase
 	}
 	
 	override string GetText(){
-		return "Access Account";
+		return "#HB_ACTIONTEXT";
 	}
 
 	

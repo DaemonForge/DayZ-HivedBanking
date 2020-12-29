@@ -19,7 +19,7 @@ class HBTransactionCallBack : RestCallback {
 		if (player) {
 			PlayerIdentity identity = PlayerIdentity.Cast(player.GetIdentity());
 			if (identity) {
-				GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(Account, "Something went wrong") , true, identity);
+				GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(Account, "#HB_ERRORUNKNOWN") , true, identity);
 			}
 		}
 	};
@@ -30,7 +30,7 @@ class HBTransactionCallBack : RestCallback {
 		if (player){
 			PlayerIdentity identity = PlayerIdentity.Cast(player.GetIdentity());
 			if (identity){
-				GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(Account, "Something went wrong") , true, identity);
+				GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(Account, "#HB_ERRORUNKNOWN") , true, identity);
 			}
 		}
 	};
@@ -51,7 +51,7 @@ class HBTransactionCallBack : RestCallback {
 					MoneyError = player.HBRemoveMoney(Amount);
 				}
 				if (MoneyError == 1){
-					ReturnError = "Money spawned on ground";
+					ReturnError = "#HB_ERRORMONEYONGROUND";
 				}
 				GetRPCManager().SendRPC("HBANK", "RPCUpdateFromServer", new Param2<HivedBankAccount, string>(Account, ReturnError) , true, identity );
 			}

@@ -55,10 +55,10 @@ class HBTransactionHandler{
 				//Print("[HivedBanking] TransactionHandler RequestWithdraw " + amount);
 				string WarningMessage ="";
 				if (!Account.DataReceived()){
-					WarningMessage = "Something went wrong";
+					WarningMessage = "#HB_ERRORUNKNOWN";
 				}
 				if (Account.DataReceived() && Account.Balance < amount){
-					WarningMessage = "Insufficient Funds";
+					WarningMessage = "#HB_ERRORLESSFUNDSBANK";
 					amount = Account.Balance;
 				}
 				if (Account.DataReceived()){
@@ -81,19 +81,19 @@ class HBTransactionHandler{
 				string WarningMessage ="";
 				
 				if (!Account.DataReceived()){
-					WarningMessage = "Something went wrong";
+					WarningMessage = "#HB_ERRORUNKNOWN";
 				}
 				
 				if ( PlayerBalance < amount ){
 					amount = PlayerBalance;
-					WarningMessage = "Don't have that much on you";
+					WarningMessage = "#HB_ERRORLESSFUNDSPLAYER";
 				}
 				float NewBalance = Account.Balance + amount;
 				float AccountLimit = GetHivedBankingModConfig().StartingLimit + Account.LimitBonus;
 				if (NewBalance > AccountLimit){
 					float OverLimit = NewBalance - AccountLimit;
 					amount = amount - OverLimit;
-					WarningMessage = "Trying to deposit more than your limit";
+					WarningMessage = "#HB_ERROROVERLIMIT";
 				}
 				if (Account.DataReceived() && amount > 0){
 					Transaction(Account, HBConstants.Deposit, amount);

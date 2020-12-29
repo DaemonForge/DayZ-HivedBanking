@@ -103,7 +103,7 @@ class HivedBankingWidget extends UIScriptedMenu
 		string GUID = data.param1;
 		float PlayerAmmount = data.param2;
 		//Print("[HivedBanking] ReceivePlayerAmmount " + PlayerAmmount);
-		m_PlayerBalance.SetText("On You: $" + MakeNiceString(PlayerAmmount));
+		m_PlayerBalance.SetText("#HB_ONYOU: $" + MakeNiceString(PlayerAmmount));
 		
 		GetGame().GetPlayer().UpdateInventoryMenu();
 	}
@@ -137,11 +137,10 @@ class HivedBankingWidget extends UIScriptedMenu
 		m_ConnectingFrame.Show(true);
 		if (UApi().HasValidAuth()){
 			HivedBankingLockControls();
-			Print("BankingWidget Init");
 			PlayerIdentity identity = PlayerIdentity.Cast(GetGame().GetPlayer().GetIdentity());
 			if (identity){
 				GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(identity.GetId()) , true);
-				m_BankLimit.SetText("Limit: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit));
+				m_BankLimit.SetText("#HB_LIMIT: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit));
 				m_Heading.SetText(GetHivedBankingModConfig().BankName);
 				g_BankAccount = new ref HivedBankAccount;
 				string guid = identity.GetId();
@@ -158,7 +157,7 @@ class HivedBankingWidget extends UIScriptedMenu
 			m_AwaitingTransaction = false;
 			m_ConnectingFrame.Show(false);
 			m_BankBalance.SetText("$" + MakeNiceString(g_BankAccount.Balance));
-			m_BankLimit.SetText("Limit: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit + g_BankAccount.LimitBonus));
+			m_BankLimit.SetText("#HB_LIMIT: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit + g_BankAccount.LimitBonus));
 		} else if (m_PanelIsOpen){
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 200, false);
 		}
@@ -231,7 +230,7 @@ class HivedBankingWidget extends UIScriptedMenu
 				GetRPCManager().SendRPC("HBANK", "RPCBankingtransaction", new Param3<string, string, float>(g_BankAccount.GUID,"DEPOSIT", SnapValue(m_Amount.GetText().ToFloat())) , true);
 				m_Amount.SetText("");
 			} else {
-				DoWarning("Invalid Amount");
+				DoWarning("#HB_ERRORINVALIDAMOUNT");
 			}
 			return true;
 		}
@@ -244,7 +243,7 @@ class HivedBankingWidget extends UIScriptedMenu
 				GetRPCManager().SendRPC("HBANK", "RPCBankingtransaction", new Param3<string, string, float>(g_BankAccount.GUID,"WITHDRAW", SnapValue(m_Amount.GetText().ToFloat())) , true);
 				m_Amount.SetText("");
 			}else {
-				DoWarning("Invalid Amount");
+				DoWarning("#HB_ERRORINVALIDAMOUNT");
 			}
 			return true;
 		}

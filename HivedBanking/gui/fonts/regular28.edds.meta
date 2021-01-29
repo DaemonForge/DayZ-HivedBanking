@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{7407E0F229D5611F}DayZ-HivedBanking/HivedBanking/GUI/fonts/regular28.edds"
+ Author "desktop-19meifj"
+ ChangeDate 1234938429
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "regular28.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

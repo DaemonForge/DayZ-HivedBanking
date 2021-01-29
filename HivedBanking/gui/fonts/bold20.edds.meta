@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{136B37829D32ECB7}DayZ-HivedBanking/HivedBanking/GUI/fonts/bold20.edds"
+ Author "desktop-19meifj"
+ ChangeDate 1133750845
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "bold20.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

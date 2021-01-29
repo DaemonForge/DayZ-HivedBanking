@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{C149578A0F2ECB9E}DayZ-HivedBanking/HivedBanking/GUI/fonts/light50.edds"
+ Author "desktop-19meifj"
+ ChangeDate 295414333
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "light50.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

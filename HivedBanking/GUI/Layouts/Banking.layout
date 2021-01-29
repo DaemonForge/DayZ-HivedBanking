@@ -13,8 +13,9 @@ FrameWidgetClass rootFrame {
   PanelWidgetClass BankingBoarder {
    ignorepointer 1
    color 0.8314 0.8314 0.8314 1
-   position 0.1 0.15
-   size 0.45 0.45
+   position 0.2 0
+   size 0.35 0.45
+   valign center_ref
    hexactpos 0
    vexactpos 0
    hexactsize 0
@@ -26,7 +27,7 @@ FrameWidgetClass rootFrame {
      ignorepointer 0
      color 0.2784 0.2784 0.2784 0.8863
      position 0 0
-     size 0.99 0.98
+     size 1 1
      halign center_ref
      valign center_ref
      hexactpos 0
@@ -57,7 +58,7 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "$00000"
-         font "HivedBanking/gui/Fonts/ddinbold32"
+         font "HivedBanking/gui/Fonts/bold32"
          "text halign" center
          "text valign" center
         }
@@ -66,7 +67,8 @@ FrameWidgetClass rootFrame {
       GridSpacerWidgetClass PlyBalBorder {
        ignorepointer 1
        color 0 0 0 1
-       size 1 0.06
+       position 0 0.02
+       size 1 0.07
        halign center_ref
        valign bottom_ref
        hexactpos 0
@@ -76,6 +78,7 @@ FrameWidgetClass rootFrame {
        style Empty
        Padding 0
        Margin 0
+       "Size To Content V" 1
        Columns 2
        Rows 1
        {
@@ -88,9 +91,11 @@ FrameWidgetClass rootFrame {
          hexactsize 1
          vexactsize 1
          text "#HB_ONYOU: 10000"
-         font "HivedBanking/gui/Fonts/ddin22"
-         "text offset" 15 -5
+         font "HivedBanking/gui/Fonts/regular26"
+         "text offset" 15 0
          "exact text" 1
+         "size to text h" 0
+         "size to text v" 1
          "text valign" center
         }
         TextWidgetClass Limit {
@@ -103,9 +108,11 @@ FrameWidgetClass rootFrame {
          hexactsize 1
          vexactsize 1
          text "#HB_LIMIT: $1000000"
-         font "HivedBanking/gui/Fonts/ddin22"
-         "text offset" -15 -5
+         font "HivedBanking/gui/Fonts/regular26"
+         "text offset" -15 0
          "exact text" 1
+         "size to text h" 0
+         "size to text v" 1
          "text halign" right
          "text valign" center
         }
@@ -132,7 +139,7 @@ FrameWidgetClass rootFrame {
          vexactsize 0
          style Normal
          text "Multi World Bank"
-         font "HivedBanking/gui/Fonts/ddinbold32"
+         font "HivedBanking/gui/Fonts/bold38"
          "exact text" 1
          "size to text h" 0
          "size to text v" 0
@@ -239,7 +246,7 @@ FrameWidgetClass rootFrame {
          hexactsize 0
          vexactsize 0
          text "#HB_CONNECTING . . ."
-         font "HivedBanking/gui/Fonts/ddin22"
+         font "HivedBanking/gui/Fonts/regular26"
          "exact text" 1
          "size to text h" 0
          "size to text v" 0
@@ -255,15 +262,16 @@ FrameWidgetClass rootFrame {
   GridSpacerWidgetClass ButtonsFrame {
    clipchildren 0
    ignorepointer 1
-   position 0.1 0.15
-   size 0.25 0.45
+   position 0.2 0
+   size 0.2 0.45
    halign right_ref
+   valign center_ref
    hexactpos 0
    vexactpos 0
    hexactsize 0
    vexactsize 0
    Padding 15
-   Margin 15
+   Margin 0
    Columns 1
    {
     TextWidgetClass Warning_Message {
@@ -277,8 +285,8 @@ FrameWidgetClass rootFrame {
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     text "Insuficent Funds"
-     font "HivedBanking/gui/Fonts/ddin22"
+     text "#HB_ERRORLESSFUNDSBANK"
+     font "HivedBanking/gui/Fonts/regular26"
      "text color" 0.8431 0.1137 0.0235 1
      "exact text" 0
      "text halign" center
@@ -294,6 +302,7 @@ FrameWidgetClass rootFrame {
      hexactsize 0
      vexactsize 0
      style DayZDefaultButtonNoBorder
+     "no focus" 1
      "text color" 0 0 0 1
      switch normal
      {
@@ -308,7 +317,7 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 0
        text "#HB_DEPOSIT"
-       font "HivedBanking/gui/Fonts/ddinbold32"
+       font "HivedBanking/gui/Fonts/bold32"
        "text color" 0 0 0 1
        "text halign" center
        "text valign" center
@@ -326,6 +335,7 @@ FrameWidgetClass rootFrame {
      hexactsize 0
      vexactsize 0
      style DayZDefaultButtonNoBorder
+     "no focus" 1
      "text color" 0 0 0 1
      switch normal
      {
@@ -341,7 +351,7 @@ FrameWidgetClass rootFrame {
        hexactsize 0
        vexactsize 0
        text "#HB_WITHDRAW"
-       font "HivedBanking/gui/Fonts/ddinbold32"
+       font "HivedBanking/gui/Fonts/bold32"
        "text halign" center
        "text valign" center
       }

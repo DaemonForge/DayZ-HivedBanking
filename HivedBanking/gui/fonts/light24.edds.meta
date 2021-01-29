@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{04FF5BD05B1295F9}DayZ-HivedBanking/HivedBanking/GUI/fonts/light24.edds"
+ Author "desktop-19meifj"
+ ChangeDate 161196605
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "light24.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

@@ -289,4 +289,19 @@ class HivedBankingWidget extends UIScriptedMenu
         GetGame().GetInput().ResetGameFocus();
         GetGame().GetUIManager().ShowUICursor(false);
     }
+
+    override void OnShow()
+    {
+        super.OnShow();
+        GetGame().GetMission().GetHud().Show(false);
+        PPEffects.SetBlurInventory(0.5);
+    }
+
+    override void OnHide()
+    {
+        super.OnHide();
+        GetGame().GetMission().GetHud().Show(true);
+        GetGame().GetUIManager().Back();
+        PPEffects.SetBlurInventory(0);
+    }
 }

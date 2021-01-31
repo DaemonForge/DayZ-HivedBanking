@@ -148,7 +148,7 @@ class HivedBankingWidget extends UIScriptedMenu
 				GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 200, false);
 			}
 		} else {
-			m_Connecting.SetText("BANK OFFLINE");
+			m_Connecting.SetText("#HB_OFFLINE");
 		}
 	}
 	

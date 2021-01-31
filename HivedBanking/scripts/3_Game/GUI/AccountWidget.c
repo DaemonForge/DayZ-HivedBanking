@@ -280,7 +280,8 @@ class HivedBankingWidget extends UIScriptedMenu
     }
 	
 	void HivedBankingLockControls() {
-        GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_MOUSE_ALL);
+        GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
+        GetGame().GetInput().ChangeGameFocus(1);
         GetGame().GetUIManager().ShowUICursor(true);
     }
 

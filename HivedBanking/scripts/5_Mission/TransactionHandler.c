@@ -113,7 +113,7 @@ class HBTransactionHandler{
 		}
 		Print("[HivedBanking] TransactionHandler Transaction: " + account.GUID + " transactionType: " + transactionType + " Amount: " + amount);
 		float orgBalance = account.Balance;
-		ref HBTransactionCallBack transactionCallBack = new ref HBTransactionCallBack;
+		ref HBTransactionCallBack transactionCallBack = new HBTransactionCallBack;
 		transactionCallBack.SetTransaction(account.GUID, amount, transactionType, account);
 		if (transactionType == HBConstants.Withdraw){
 			account.Balance = orgBalance - amount;

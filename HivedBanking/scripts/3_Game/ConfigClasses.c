@@ -10,7 +10,7 @@ class HivedBankingModConfig extends UApiConfigBase
 	
 	ref array<int> MenuThemeColour = {2, 136, 209};
 	
-	ref array<ref HBMoneyValue> MoneyValues = new ref array<ref HBMoneyValue>;
+	ref array<ref HBMoneyValue> MoneyValues = new array<ref HBMoneyValue>;
 	
 	override void Load(){
 		SetDataReceived(false);
@@ -45,12 +45,12 @@ class HivedBankingModConfig extends UApiConfigBase
 	}
 	
 	override void SetDefaults(){
-		MoneyValues.Insert(new ref HBMoneyValue("MoneyRuble100", 100));
-		MoneyValues.Insert(new ref HBMoneyValue("MoneyRuble50", 50));
-		MoneyValues.Insert(new ref HBMoneyValue("MoneyRuble25", 25));
-		MoneyValues.Insert(new ref HBMoneyValue("MoneyRuble10", 10));
-		MoneyValues.Insert(new ref HBMoneyValue("MoneyRuble5", 5));
-		MoneyValues.Insert(new ref HBMoneyValue("MoneyRuble1", 1));
+		MoneyValues.Insert(new HBMoneyValue("MoneyRuble100", 100));
+		MoneyValues.Insert(new HBMoneyValue("MoneyRuble50", 50));
+		MoneyValues.Insert(new HBMoneyValue("MoneyRuble25", 25));
+		MoneyValues.Insert(new HBMoneyValue("MoneyRuble10", 10));
+		MoneyValues.Insert(new HBMoneyValue("MoneyRuble5", 5));
+		MoneyValues.Insert(new HBMoneyValue("MoneyRuble1", 1));
 	}
 	
 	override void OnError(int errorCode) {
@@ -86,7 +86,7 @@ class HivedBankingModConfig extends UApiConfigBase
 		for (int h = 0; h < MoneyValues.Count(); h++){
 			StartingValues.Insert(MoneyValues.Get(h));
 		}
-		ref array<ref HBMoneyValue> SortedMoneyValues = new ref array<ref HBMoneyValue>;
+		ref array<ref HBMoneyValue> SortedMoneyValues = new array<ref HBMoneyValue>;
 		while (StartingValues.Count() > 0){
 			ref HBMoneyValue HighestValue = StartingValues.Get(0);
 			for (int i = 1; i < StartingValues.Count(); i++){

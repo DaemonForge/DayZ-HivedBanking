@@ -142,7 +142,7 @@ class HivedBankingWidget extends UIScriptedMenu
 				GetRPCManager().SendRPC("HBANK", "RPCReqPlayerBalance", new Param1<string>(identity.GetId()) , true);
 				m_BankLimit.SetText("#HB_LIMIT: $" + MakeNiceString(GetHivedBankingModConfig().StartingLimit));
 				m_Heading.SetText(GetHivedBankingModConfig().BankName);
-				g_BankAccount = new ref HivedBankAccount;
+				g_BankAccount = new HivedBankAccount;
 				string guid = identity.GetId();
 				g_BankAccount.Load(guid);
 				GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 200, false);

@@ -3,29 +3,29 @@ bool m_HivedBankingPanel_Opening = false;
 
 class HivedBankingWidget extends UIScriptedMenu
 {	
-	protected ref HivedBankAccount		g_BankAccount;
+	protected ref HivedBankAccount			g_BankAccount;
 	protected bool						m_PanelIsOpen = false; 
 	protected bool						m_IsInitialized = false;
 	protected bool						m_AwaitingTransaction = false;
 	protected bool						m_TransactionLocked = false;
 	
 	
-	protected ref Widget				m_BankingBoarder;
-	protected ref Widget				m_BankingPanel;
-	protected ref TextWidget			m_Heading;
-	protected ref TextWidget			m_BankBalance;
-	protected ref TextWidget			m_BankLimit;
-	protected ref TextWidget			m_PlayerBalance;
-	protected ref TextWidget			m_WarningMessage;
-	protected ref TextWidget			m_DollarSign;
-	protected ref EditBoxWidget			m_Amount;
-	protected ref Widget				m_ConnectingFrame;
-	protected ref TextWidget			m_Connecting;
-	protected ref Widget				m_BankBalBorder;
-	protected ref Widget				m_AmountBorder;
+	protected Widget				m_BankingBoarder;
+	protected Widget				m_BankingPanel;
+	protected TextWidget			m_Heading;
+	protected TextWidget			m_BankBalance;
+	protected TextWidget			m_BankLimit;
+	protected TextWidget			m_PlayerBalance;
+	protected TextWidget			m_WarningMessage;
+	protected TextWidget			m_DollarSign;
+	protected EditBoxWidget			m_Amount;
+	protected Widget				m_ConnectingFrame;
+	protected TextWidget			m_Connecting;
+	protected Widget				m_BankBalBorder;
+	protected Widget				m_AmountBorder;
 	
-	protected ref ButtonWidget			m_DepositButton;
-	protected ref ButtonWidget			m_WithdrawButton;
+	protected ButtonWidget			m_DepositButton;
+	protected ButtonWidget			m_WithdrawButton;
 	
 	
 	override Widget Init()
@@ -34,7 +34,7 @@ class HivedBankingWidget extends UIScriptedMenu
 			Initialize();
 		}
 		
-		layoutRoot 					= GetGame().GetWorkspace().CreateWidgets("HivedBanking/GUI/Layouts/Banking.layout");
+		layoutRoot 					= Widget.Cast( GetGame().GetWorkspace().CreateWidgets("HivedBanking/GUI/Layouts/Banking.layout"));
 		m_BankingBoarder			= Widget.Cast( layoutRoot.FindAnyWidget( "BankingBoarder" ) );
 		m_BankingPanel	        	= Widget.Cast( layoutRoot.FindAnyWidget( "BankingPanel" ) );
 		m_Heading	    			= TextWidget.Cast( layoutRoot.FindAnyWidget( "Heading" ) );
@@ -79,7 +79,7 @@ class HivedBankingWidget extends UIScriptedMenu
 		Param2<HivedBankAccount, string> data;  //Player ID, Icon
 		if ( !ctx.Read( data ) ) return;
 		if ( data.param1 != NULL ){
-			g_BankAccount = data.param1;
+			g_BankAccount = HivedBankAccount.Cast(data.param1);
 			string guid = g_BankAccount.GUID;
 			g_BankAccount.Load(guid); //To be safe reload from the database directly
 			GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(this.CheckForData, 300, false);
@@ -281,7 +281,6 @@ class HivedBankingWidget extends UIScriptedMenu
 	
 	void HivedBankingLockControls() {
         GetGame().GetMission().PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
-        GetGame().GetInput().ChangeGameFocus(1);
         GetGame().GetUIManager().ShowUICursor(true);
     }
 
@@ -305,4 +304,6 @@ class HivedBankingWidget extends UIScriptedMenu
         GetGame().GetUIManager().Back();
         PPEffects.SetBlurInventory(0);
     }
+	
+	
 }

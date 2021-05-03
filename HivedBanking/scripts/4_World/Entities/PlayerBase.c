@@ -270,10 +270,10 @@ modded class PlayerBase extends ManBase
 	int HBMaxQuantity(string Type)
 	{
 		if ( GetGame().ConfigIsExisting(  CFG_MAGAZINESPATH  + " " + Type + " count" ) ){
-			return g_Game.ConfigGetInt(  CFG_MAGAZINESPATH  + " " + Type + " count" );
+			return GetGame().ConfigGetInt(  CFG_MAGAZINESPATH  + " " + Type + " count" );
 		}
 		if ( GetGame().ConfigIsExisting(  CFG_VEHICLESPATH + " " + Type + " varQuantityMax" ) ){
-			return g_Game.ConfigGetInt( CFG_VEHICLESPATH + " " + Type + " varQuantityMax" ) );
+			return GetGame().ConfigGetInt( CFG_VEHICLESPATH + " " + Type + " varQuantityMax" ) );
 		}
 		return 0;
 	}

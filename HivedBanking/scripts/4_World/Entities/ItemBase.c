@@ -1,20 +1,15 @@
-modded class ItemBase
-{
-    //returns remainder
-    int HBAddQuantity(float amount)
-	{	
-        if (!IsMagazine())
-		{
-            int this_free_space = GetQuantityMax() - GetQuantity();
-			if (this_free_space == 0)
+modded class ItemBase {
+	//returns remaining
+    int HBAddQuantity(float amount) {	
+        if (!IsMagazine()) {
+            int remainingQty = GetQuantityMax() - GetQuantity();
+			if (remainingQty == 0){
                 return amount;
-            if ( amount >= this_free_space )
-            {
-                AddQuantity(this_free_space);
-                return amount - this_free_space;
-            }
-            else
-            {
+			}
+            if ( amount >= remainingQty ) {
+                AddQuantity(remainingQty);
+                return amount - remainingQty;
+            } else {
                 AddQuantity(amount);
                 return 0;
             }
@@ -22,18 +17,14 @@ modded class ItemBase
         return amount;
 	}
 
-    int HBSetQuantity(float amount)
-	{	
-        if (!IsMagazine())
-		{
-            int maxAmount = GetQuantityMax();			
-            if ( amount >= maxAmount )
-            {
-                SetQuantity(maxAmount);
-                return amount - maxAmount;
-            }
-            else
-            {
+	//returns remaining
+    int HBSetQuantity(float amount) {	
+        if (!IsMagazine()) {
+            int maxQty = GetQuantityMax();			
+            if ( amount >= maxQty ) {
+                SetQuantity(maxQty);
+                return amount - maxQty;
+            } else {
                 SetQuantity(amount);
                 return 0;
             }
@@ -41,8 +32,7 @@ modded class ItemBase
         return amount;
 	}
     
-    bool HasQuantityBar()
-    {
+    bool HasQuantityBar() {
         return this.ConfigGetBool("quantityBar");
     }
 };

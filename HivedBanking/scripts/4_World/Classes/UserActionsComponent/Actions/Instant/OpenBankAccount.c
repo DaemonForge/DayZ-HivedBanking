@@ -1,7 +1,7 @@
 class ActionAccessHivedAccount extends ActionInteractBase
 {
 
-	void ExpansionActionOpenTraderMenu(){
+	void ActionAccessHivedAccount(){
 		m_CommandUID = DayZPlayerConstants.CMD_ACTIONMOD_ATTACHITEM;
 	}
 	

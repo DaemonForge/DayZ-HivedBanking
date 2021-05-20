@@ -6,7 +6,7 @@ modded class MissionGameplay extends MissionBase
 
         Input input = GetGame().GetInput();
         if (input.LocalPress("UAUIBack", false)) {
-            if (m_HivedBankingPanel != NULL && GetGame().GetUIManager().GetMenu() == m_HivedBankingPanel) {
+            if ( GetGame().GetUIManager().IsMenuOpen(HIVEDBANKING_PANEL_MENU) || (m_HivedBankingPanel != NULL && GetGame().GetUIManager().GetMenu() == m_HivedBankingPanel)) {
                 HivedBankingClosePanel();
             }
 		}
@@ -14,8 +14,10 @@ modded class MissionGameplay extends MissionBase
 	
 	void HivedBankingClosePanel()
 	{
-		m_HivedBankingPanel.SetOpen(false);
-        GetGame().GetUIManager().HideScriptedMenu(m_HivedBankingPanel);
+		if (m_HivedBankingPanel){
+			m_HivedBankingPanel.SetOpen(false);
+		}
+		GetGame().GetUIManager().CloseMenu(HIVEDBANKING_PANEL_MENU);
 		HivedBankingUnLockControls();
 	}
 

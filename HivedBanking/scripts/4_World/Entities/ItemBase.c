@@ -31,8 +31,4 @@ modded class ItemBase {
 		}        
         return amount;
 	}
-    
-    bool HasQuantityBar() {
-        return this.ConfigGetBool("quantityBar");
-    }
 };
